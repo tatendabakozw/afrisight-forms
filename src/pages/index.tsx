@@ -1,8 +1,24 @@
 import FieldSection from "@/components/field-section/FieldSection";
-import FieldTypeDropdown from "@/components/field-type-dropdown/FieldTypeDropdown";
 import GeneralLayout from "@/layouts/GeneralLayout";
+import { field_types } from "@/lib/field_types_data";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableItem } from "@/components/sortable-item/SortableItem";
 
 // Define the structure of a section
 interface SectionType {
@@ -32,14 +48,15 @@ const all_sections: SectionType[] = [
 
 function Home() {
   const [sections, setSections] = useState<Section[]>([]);
-  const [currentSectionType, setCurrentSectionType] =
-    useState<string>("short-answer");
+  const [currentSectionType, setCurrentSectionType] = useState<any>(
+    field_types[0]
+  );
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
 
   // Function to add a new section to the state
   const addNewSection = () => {
     const section = all_sections.find(
-      (sec) => sec.type.type_id === currentSectionType
+      (sec) => sec.type.type_id === currentSectionType._id
     );
     if (section) {
       setSections([
@@ -54,16 +71,52 @@ function Home() {
     setSections(sections.filter((section) => section.id !== id));
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setSections((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   return (
     <GeneralLayout>
       <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
-          {sections.map((section) => (
-            <FieldSection
-              handleDeleteSection={() => handleDeleteSection(section.id)}
-              key={section.id}
-            />
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={sections.map((s) => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {sections.map((section) => (
+                <SortableItem key={section.id} id={section.id}>
+                  <FieldSection
+                    handleDeleteSection={() => handleDeleteSection(section.id)}
+                  />
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </DndContext>
 
           <button
             onClick={addNewSection}

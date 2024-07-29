@@ -25,7 +25,7 @@ function FieldSection({ handleDeleteSection }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 border border-zinc-200/50 space-y-4">
+    <div className="bg-white rounded-xl p-4 space-y-4">
       <div className="flex flex-row items-center justify-between">
         <p className="text-zinc-950 text-lg font-semibold">{type.name}</p>
         <div className="flex">
