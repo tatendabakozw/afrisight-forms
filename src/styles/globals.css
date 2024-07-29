@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  touch-action: none; /* This ensures that the touch events are not blocked */
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
