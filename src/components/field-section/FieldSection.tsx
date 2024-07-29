@@ -6,6 +6,7 @@ import FieldTypeDropdown from "../field-type-dropdown/FieldTypeDropdown";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { FieldType } from "@/lib/types";
 import TextArea from "../inputs/TextArea";
+import MultipeChoice from "../inputs/MultipeChoice";
 
 interface Props {
   handleDeleteSection: () => void;
@@ -35,6 +36,8 @@ function FieldSection({
             setValue={handleSectionValueChange}
           />
         );
+      case "multiple-choice":
+        return <MultipeChoice />;
       case "text-area":
         return <TextArea />;
       case "paragraph":
