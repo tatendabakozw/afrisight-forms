@@ -71,10 +71,10 @@ function FieldSection({
         </div>
       </div>
       <div className="w-full gap-4">{showInputArea()}</div>
-      <div className="flex flex-end w-full gap-4">
+      <div className="flex self-end w-full gap-4 flex-col">
         <button
           onClick={handleDeleteSection}
-          className="bg-zinc-100 rounded-full p-2"
+          className="bg-zinc-100 self-end rounded-full p-2"
         >
           <TrashIcon height={20} width={20} />
         </button>

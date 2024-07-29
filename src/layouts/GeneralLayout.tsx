@@ -10,10 +10,9 @@ type Props = {
 
 function GeneralLayout({ children }: Props) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pt-16">
       <Navbar />
-      <div className="relative flex flex-col min-h-screen">
-        <div className="fixed h-10 w-10 bg-blue-600 rounded-full bottom-5 right-5"></div>
+      <div className="relative flex flex-col min-h-screen bg-zinc-100 pt-4">
         {children}
       </div>
       <Footer />
