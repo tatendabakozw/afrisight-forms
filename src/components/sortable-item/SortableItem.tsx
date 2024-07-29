@@ -18,9 +18,9 @@ export function SortableItem(props: any) {
         {...attributes}
         {...listeners}
         style={{ touchAction: "none" }}
-        className="cursor-move p-2 bg-white  border border-zinc-200/50 rounded-xl w-1/3 mx-auto"
+        className="cursor-move p-1 bg-white  border border-zinc-200/50 rounded-xl w-1/3 mx-auto"
       >
-        <div className="flex w-full flex flex-row items-center">
+        <div className="flex w-14 flex-row items-center self-center mx-auto text-zinc-300">
           <ArrowLongDownIcon height={12} width={12} />
           <div className=" flex-1 h-1 rounded-full  bg-zinc-200 mx-auto" />
           <ArrowLongUpIcon height={12} width={12} />
