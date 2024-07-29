@@ -7,6 +7,7 @@ export function SortableItem(props: any) {
     useSortable({ id: props.id });
 
   const style = {
+    touchAction: "none",
     transform: CSS.Transform.toString(transform),
     transition,
   };
