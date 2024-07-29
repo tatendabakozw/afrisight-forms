@@ -50,12 +50,19 @@ function Home() {
     }
   };
 
+  const handleDeleteSection = (id: number) => {
+    setSections(sections.filter((section) => section.id !== id));
+  };
+
   return (
     <GeneralLayout>
       <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
           {sections.map((section) => (
-            <FieldSection key={section.id} />
+            <FieldSection
+              handleDeleteSection={() => handleDeleteSection(section.id)}
+              key={section.id}
+            />
           ))}
 
           <button
