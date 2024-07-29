@@ -48,24 +48,23 @@ const all_sections: SectionType[] = [
 
 function Home() {
   const [sections, setSections] = useState<Section[]>([]);
-  const [currentSectionType, setCurrentSectionType] = useState<any>(
-    field_types[0]
-  );
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
 
   // Function to add a new section to the state
   const addNewSection = () => {
-    const section = all_sections.find(
-      (sec) => sec.type.type_id === currentSectionType._id
-    );
+    const section = all_sections[0];
     if (section) {
-      setSections([
-        ...sections,
-        { ...section, value: currentSectionValue, id: sections.length + 1 },
+      console.log("added new sectiion");
+      setSections((prevSections) => [
+        ...prevSections,
+        { ...section, value: currentSectionValue, id: sections.length + 1 }, // Add a unique ID and some default content
       ]);
       setCurrentSectionValue(""); // Reset section value after adding
     }
+    console.log("added new sectiion");
   };
+
+  console.log("all sections: ", sections);
 
   const handleDeleteSection = (id: number) => {
     setSections(sections.filter((section) => section.id !== id));
