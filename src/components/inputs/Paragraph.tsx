@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
-type Props = {};
+type Props = {
+  value: string;
+  setValue: (value: string) => void;
+};
 
-function Paragraph({}: Props) {
-  const [value, setValue] = useState("");
+function Paragraph({ value, setValue }: Props) {
   return (
     <textarea
-      rows={5}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       placeholder="Question"

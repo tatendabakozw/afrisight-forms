@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
-type Props = {};
+type Props = {
+  value: string;
+  setValue: (value: string) => void;
+};
 
-function ShortAnswer({}: Props) {
-  const [value, setValue] = useState("");
+function ShortAnswer({ value, setValue }: Props) {
   return (
     <input
       type="text"

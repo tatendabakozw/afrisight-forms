@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import FieldSection from "@/components/field-section/FieldSection";
 import GeneralLayout from "@/layouts/GeneralLayout";
 import { field_types } from "@/lib/field_types_data";
 import { PlusIcon } from "@heroicons/react/20/solid";
-import React, { useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -71,6 +71,22 @@ function Home() {
     setSections(sections.filter((section) => section.id !== id));
   };
 
+  const handleSectionTypeChange = (id: number, newType: any) => {
+    setSections((prevSections) =>
+      prevSections.map((section) =>
+        section.id === id ? { ...section, type: newType } : section
+      )
+    );
+  };
+
+  const handleSectionValueChange = (id: number, newValue: string) => {
+    setSections((prevSections) =>
+      prevSections.map((section) =>
+        section.id === id ? { ...section, value: newValue } : section
+      )
+    );
+  };
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -112,6 +128,13 @@ function Home() {
                 <SortableItem key={section.id} id={section.id}>
                   <FieldSection
                     handleDeleteSection={() => handleDeleteSection(section.id)}
+                    handleSectionTypeChange={(newType: any) =>
+                      handleSectionTypeChange(section.id, newType)
+                    }
+                    handleSectionValueChange={(newValue: string) =>
+                      handleSectionValueChange(section.id, newValue)
+                    }
+                    sectionValue={section.value}
                   />
                 </SortableItem>
               ))}

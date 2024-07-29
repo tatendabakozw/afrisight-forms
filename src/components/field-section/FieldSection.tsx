@@ -1,5 +1,5 @@
+import { useState, useEffect } from "react";
 import { field_types } from "@/lib/field_types_data";
-import { useState } from "react";
 import ShortAnswer from "../inputs/ShortAnswer";
 import Paragraph from "../inputs/Paragraph";
 import FieldTypeDropdown from "../field-type-dropdown/FieldTypeDropdown";
@@ -8,20 +8,49 @@ import { FieldType } from "@/lib/types";
 
 interface Props {
   handleDeleteSection: () => void;
+  handleSectionTypeChange: (newType: FieldType) => void;
+  handleSectionValueChange: (newValue: string) => void;
+  sectionValue: string;
 }
 
-function FieldSection({ handleDeleteSection }: Props) {
+function FieldSection({
+  handleDeleteSection,
+  handleSectionTypeChange,
+  handleSectionValueChange,
+  sectionValue,
+}: Props) {
   const [type, setType] = useState<FieldType>(field_types[0]);
+
+  useEffect(() => {
+    handleSectionTypeChange(type);
+  }, [type]);
 
   const showInputArea = () => {
     switch (type._id) {
       case "short-answer":
-        return <ShortAnswer />;
+        return (
+          <ShortAnswer
+            value={sectionValue}
+            setValue={handleSectionValueChange}
+          />
+        );
       case "paragraph":
-        return <Paragraph />;
+        return (
+          <Paragraph value={sectionValue} setValue={handleSectionValueChange} />
+        );
       default:
-        return <ShortAnswer />;
+        return (
+          <ShortAnswer
+            value={sectionValue}
+            setValue={handleSectionValueChange}
+          />
+        );
     }
+  };
+
+  const handleChangeType = (newType: FieldType) => {
+    setType(newType);
+    handleSectionTypeChange(newType);
   };
 
   return (
@@ -31,7 +60,7 @@ function FieldSection({ handleDeleteSection }: Props) {
         <div className="flex">
           <FieldTypeDropdown
             value={type._id} // Pass _id or similar identifier
-            setSectionType={setType}
+            setSectionType={handleChangeType}
           />
         </div>
       </div>
