@@ -1,12 +1,12 @@
 import GeneralLayout from "@/layouts/GeneralLayout";
 import React from "react";
 
-function Home() {
+function index() {
   return (
     <GeneralLayout>
-      <div className="flex">sfasdfds</div>
+      <div>acontact</div>
     </GeneralLayout>
   );
 }
 
-export default Home;
+export default index;
