@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import FieldSection from "@/components/field-section/FieldSection";
 import GeneralLayout from "@/layouts/GeneralLayout";
-import { field_types } from "@/lib/field_types_data";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   DndContext,
