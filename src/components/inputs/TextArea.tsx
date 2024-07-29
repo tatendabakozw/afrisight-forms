@@ -54,12 +54,14 @@ const TextArea = (props: Props) => {
           {description ? description : "Click here to change description"}
         </div>
       )}
-      <div
-        onClick={saveitems}
-        className="flex self-end bg-brand-original text-white px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer"
-      >
-        Save
-      </div>
+      {(descriptionClicked || headingClicked) && (
+        <div
+          onClick={saveitems}
+          className="flex self-end bg-brand-original text-white px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer"
+        >
+          Save
+        </div>
+      )}
     </div>
   );
 };
