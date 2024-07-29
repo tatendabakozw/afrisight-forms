@@ -1,9 +1,9 @@
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 
 export const nav_items = [
-  { name: "Home", location: "/", id: "asldj" },
-  { name: "About", location: "/about", id: "aslwwdj" },
-  { name: "Contact", location: "/contact", id: "asl111dj" },
+  // { name: "Home", location: "/", id: "asldj" },
+  // { name: "About", location: "/about", id: "aslwwdj" },
+  // { name: "Contact", location: "/contact", id: "asl111dj" },
 ];
 export const dashboard_nav = {
   sidebar: [
