@@ -7,6 +7,7 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { FieldType } from "@/lib/types";
 import TextArea from "../inputs/TextArea";
 import MultipeChoice from "../inputs/MultipeChoice";
+import DatePicker from "../inputs/DatePicker";
 
 interface Props {
   handleDeleteSection: () => void;
@@ -36,6 +37,8 @@ function FieldSection({
             setValue={handleSectionValueChange}
           />
         );
+      case "date":
+        return <DatePicker />;
       case "multiple-choice":
         return <MultipeChoice />;
       case "text-area":

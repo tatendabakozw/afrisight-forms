@@ -15,7 +15,6 @@ function GeneralLayout({ children }: Props) {
       <div className="relative flex flex-col min-h-screen bg-zinc-100 pt-4">
         {children}
       </div>
-      <Footer />
     </div>
   );
 }
