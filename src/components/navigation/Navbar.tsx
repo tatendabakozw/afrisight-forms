@@ -1,8 +1,13 @@
+import { useForm } from "@/context/FormContext";
 import React, { useState } from "react";
 
 type Props = {};
 
 function Navbar({}: Props) {
+  const { sections, addSection, updateSection, deleteSection, saveFormAsJSON } =
+    useForm();
+
+  console.log("sections in navbar: ", sections);
   return (
     <div className="flex flex-col items-center py-4 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
       <div className="flex flex-row items-center max-w-7xl justify-between w-full mx-auto px-4">

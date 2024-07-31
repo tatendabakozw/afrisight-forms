@@ -18,71 +18,44 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "@/components/sortable-item/SortableItem";
+import { useForm } from "@/context/FormContext";
 
-// Define the structure of a section
+// Define the structure of a section type
 interface SectionType {
-  type: {
-    name: string;
-    type_id: string;
-  };
-  value: string;
-  setValue: string;
+  name: string;
+  type_id: string;
 }
 
-// Define the structure for a section in state
-interface Section extends SectionType {
-  id: number;
-}
+const initialSectionType: SectionType = {
+  name: "Short Answer",
+  type_id: "short-answer",
+};
 
-const all_sections: SectionType[] = [
-  {
-    type: {
-      name: "Short Answer",
-      type_id: "short-answer",
-    },
-    value: "",
-    setValue: "",
-  },
-];
-
-function Home() {
-  const [sections, setSections] = useState<Section[]>([]);
+const Home: React.FC = () => {
+  const { sections, addSection, updateSection, deleteSection, saveFormAsJSON } =
+    useForm();
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
 
-  // Function to add a new section to the state
   const addNewSection = () => {
-    const section = all_sections[0];
-    if (section) {
-      console.log("added new sectiion");
-      setSections((prevSections) => [
-        ...prevSections,
-        { ...section, value: currentSectionValue, id: sections.length + 1 }, // Add a unique ID and some default content
-      ]);
-      setCurrentSectionValue(""); // Reset section value after adding
-    }
-    console.log("added new sectiion");
+    const newSection = {
+      id: sections.length + 1,
+      type: initialSectionType,
+      value: currentSectionValue,
+    };
+    addSection(newSection);
+    setCurrentSectionValue(""); // Reset section value after adding
   };
-
-  console.log("all sections: ", sections);
 
   const handleDeleteSection = (id: number) => {
-    setSections(sections.filter((section) => section.id !== id));
+    deleteSection(id);
   };
 
-  const handleSectionTypeChange = (id: number, newType: any) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === id ? { ...section, type: newType } : section
-      )
-    );
+  const handleSectionTypeChange = (id: number, newType: SectionType) => {
+    updateSection(id, { type: newType });
   };
 
   const handleSectionValueChange = (id: number, newValue: string) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === id ? { ...section, value: newValue } : section
-      )
-    );
+    updateSection(id, { value: newValue });
   };
 
   const sensors = useSensors(
@@ -98,13 +71,13 @@ function Home() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
-      setSections((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
-        return arrayMove(items, oldIndex, newIndex);
+      const oldIndex = sections.findIndex((item) => item.id === active.id);
+      const newIndex = sections.findIndex((item) => item.id === over.id);
+      const newSections = arrayMove(sections, oldIndex, newIndex);
+      // Updating state with new sections order
+      newSections.forEach((section, index) => {
+        updateSection(section.id, { id: index + 1 });
       });
     }
   };
@@ -119,7 +92,7 @@ function Home() {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={sections.map((s) => s.id)}
+              items={sections.map((section) => section.id)}
               strategy={verticalListSortingStrategy}
             >
               {sections.map((section) => (
@@ -138,7 +111,6 @@ function Home() {
               ))}
             </SortableContext>
           </DndContext>
-
           <button
             onClick={addNewSection}
             className="bg-brand-original/20 border border-dashed w-full items-center content-center justify-center flex flex-row space-x-4 border-brand-original p-8 rounded-xl"
@@ -150,6 +122,6 @@ function Home() {
       </div>
     </GeneralLayout>
   );
-}
+};
 
 export default Home;
