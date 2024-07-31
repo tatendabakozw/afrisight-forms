@@ -6,7 +6,7 @@ interface SectionType {
 }
 
 interface Section {
-  id: number;
+  id: any;
   type: SectionType;
   value: string;
 }
@@ -17,6 +17,7 @@ interface FormContextProps {
   updateSection: (id: number, newValue: Partial<Section>) => void;
   deleteSection: (id: number) => void;
   saveFormAsJSON: () => void;
+  updateSectionOrder: (newSections: Section[]) => void;
 }
 
 const FormContext = createContext<FormContextProps | undefined>(undefined);
@@ -49,6 +50,10 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Form JSON:", formJSON);
   };
 
+  const updateSectionOrder = (newSections: Section[]) => {
+    setSections(newSections);
+  };
+
   return (
     <FormContext.Provider
       value={{
@@ -57,6 +62,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
         updateSection,
         deleteSection,
         saveFormAsJSON,
+        updateSectionOrder,
       }}
     >
       {children}

@@ -24,16 +24,26 @@ import { useForm } from "@/context/FormContext";
 interface SectionType {
   name: string;
   type_id: string;
+  id: number;
+  value: string;
 }
 
 const initialSectionType: SectionType = {
   name: "Short Answer",
   type_id: "short-answer",
+  id: 0,
+  value: "",
 };
 
 const Home: React.FC = () => {
-  const { sections, addSection, updateSection, deleteSection, saveFormAsJSON } =
-    useForm();
+  const {
+    sections,
+    addSection,
+    updateSection,
+    deleteSection,
+    saveFormAsJSON,
+    updateSectionOrder,
+  } = useForm();
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
 
   const addNewSection = () => {
@@ -76,9 +86,7 @@ const Home: React.FC = () => {
       const newIndex = sections.findIndex((item) => item.id === over.id);
       const newSections = arrayMove(sections, oldIndex, newIndex);
       // Updating state with new sections order
-      newSections.forEach((section, index) => {
-        updateSection(section.id, { id: index + 1 });
-      });
+      updateSectionOrder(newSections);
     }
   };
 
@@ -117,6 +125,12 @@ const Home: React.FC = () => {
           >
             <PlusIcon height={20} width={20} />
             <p>Add new section</p>
+          </button>
+          <button
+            onClick={saveFormAsJSON}
+            className="bg-brand-original w-full items-center content-center justify-center flex flex-row space-x-4 p-8 rounded-xl mt-4"
+          >
+            <p>Save Form as JSON</p>
           </button>
         </div>
       </div>
