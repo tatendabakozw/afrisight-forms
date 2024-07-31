@@ -38,11 +38,23 @@ function FieldSection({
           />
         );
       case "date":
-        return <DatePicker />;
+        return (
+          <DatePicker
+            value={sectionValue}
+            setValue={handleSectionValueChange}
+          />
+        );
       case "multiple-choice":
-        return <MultipeChoice />;
+        return (
+          <MultipeChoice
+            value={sectionValue}
+            setValue={handleSectionValueChange}
+          />
+        );
       case "text-area":
-        return <TextArea />;
+        return (
+          <TextArea value={sectionValue} setValue={handleSectionValueChange} />
+        );
       case "paragraph":
         return (
           <Paragraph value={sectionValue} setValue={handleSectionValueChange} />

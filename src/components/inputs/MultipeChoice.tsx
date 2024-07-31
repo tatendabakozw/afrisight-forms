@@ -6,13 +6,15 @@ type Option = {
   _id: string;
 };
 
-type Props = {};
+type Props = {
+  value: string;
+  setValue: (value: string) => void;
+};
 
-const MultipeChoice = (props: Props) => {
+const MultipeChoice = ({ value, setValue }: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [newOptionName, setNewOptionName] = useState("");
   const [questionClicked, setQuestionClicked] = useState(false);
-  const [question, setQuestion] = useState("");
 
   const handleAddOption = () => {
     if (newOptionName.trim()) {
@@ -30,8 +32,8 @@ const MultipeChoice = (props: Props) => {
         <div className="flex flex-row items-center gap-4">
           <input
             type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             placeholder="Question"
             className="bg-zinc-100 border w-full border-zinc-200/50 py-2 text-sm px-4 rounded-xl gap-4 flex-1"
           />
@@ -47,7 +49,7 @@ const MultipeChoice = (props: Props) => {
           onClick={() => setQuestionClicked(true)}
           className="text-zinc-500 text-sm"
         >
-          {question ? question : "Click here to change question"}
+          {value ? value : "Click here to change question"}
         </div>
       )}
       {options.map((option) => (
