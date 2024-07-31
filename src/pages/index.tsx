@@ -126,12 +126,6 @@ const Home: React.FC = () => {
             <PlusIcon height={20} width={20} />
             <p>Add new section</p>
           </button>
-          <button
-            onClick={saveFormAsJSON}
-            className="bg-brand-original w-full items-center content-center justify-center flex flex-row space-x-4 p-8 rounded-xl mt-4"
-          >
-            <p>Save Form as JSON</p>
-          </button>
         </div>
       </div>
     </GeneralLayout>
