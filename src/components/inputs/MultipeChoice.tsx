@@ -1,3 +1,4 @@
+import { PlusIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 
 type Option = {
@@ -65,9 +66,9 @@ const MultipeChoice = (props: Props) => {
         />
         <button
           onClick={handleAddOption}
-          className="bg-brand-original flex-shrink-0 text-white p-2 rounded-lg text-xs font-semibold"
+          className="bg-brand-original flex-shrink-0 text-white p-2 rounded-full text-xs font-semibold"
         >
-          Add Option
+          <PlusIcon height={24} width={24} />
         </button>
       </div>
     </div>
