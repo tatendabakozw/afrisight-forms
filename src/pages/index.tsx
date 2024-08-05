@@ -41,7 +41,10 @@ const Home: React.FC = () => {
     addSection,
     updateSection,
     deleteSection,
-    saveFormAsJSON,
+    formName,
+    formDescription,
+    setFormName,
+    setFormDescription,
     updateSectionOrder,
   } = useForm();
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
@@ -94,6 +97,26 @@ const Home: React.FC = () => {
     <GeneralLayout>
       <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
+          <div className="flex flex-col space-y-2">
+            <p className="text-zinc-700 font-medium">Form name</p>
+            <input
+              type="text"
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+              className="bg-zinc-200 p-3 rounded-xl "
+              placeholder="Give your form a name"
+            />
+          </div>
+          <div className="flex flex-col space-y-2">
+            <p className="text-zinc-700 font-medium">Description</p>
+            <textarea
+              rows={5}
+              value={formDescription}
+              onChange={(e) => setFormDescription(e.target.value)}
+              className="bg-zinc-200 p-3 rounded-xl "
+              placeholder="Write a small description for your form"
+            />
+          </div>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

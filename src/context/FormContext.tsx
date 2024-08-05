@@ -13,11 +13,15 @@ interface Section {
 
 interface FormContextProps {
   sections: Section[];
+  formName: string;
+  formDescription: string;
   addSection: (section: Section) => void;
   updateSection: (id: number, newValue: Partial<Section>) => void;
   deleteSection: (id: number) => void;
   saveFormAsJSON: () => void;
   updateSectionOrder: (newSections: Section[]) => void;
+  setFormName: (name: string) => void;
+  setFormDescription: (name: string) => void;
 }
 
 const FormContext = createContext<FormContextProps | undefined>(undefined);
@@ -26,6 +30,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [sections, setSections] = useState<Section[]>([]);
+  const [formName, setFormName] = useState<string>("");
+  const [formDescription, setFormDescription] = useState<string>("");
 
   const addSection = (section: Section) => {
     setSections((prevSections) => [...prevSections, section]);
@@ -45,8 +51,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
-  const saveFormAsJSON = () => {
-    const formJSON = JSON.stringify(sections, null, 2);
+  const saveFormAsJSON = async () => {
+    const formJSON = JSON.stringify({ formName, sections }, null, 2);
     console.log("Form JSON:", formJSON);
   };
 
@@ -58,11 +64,15 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     <FormContext.Provider
       value={{
         sections,
+        formName,
         addSection,
         updateSection,
         deleteSection,
         saveFormAsJSON,
         updateSectionOrder,
+        setFormName,
+        formDescription,
+        setFormDescription,
       }}
     >
       {children}

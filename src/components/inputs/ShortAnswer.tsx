@@ -23,3 +23,19 @@ function ShortAnswer({ value, setValue }: Props) {
 }
 
 export default ShortAnswer;
+// interface ComponentProps<T> {
+//   name: string
+//   data: T
+// }
+
+// type ShortAnswerProps = {
+//   value: string
+//   setValue: () => void
+// }
+
+// export default ShortAnswer;
+// const imp = (component: "ShortAnswer" | "Paragraph", props: ComponentProps<ShortAnswerProps>) => {
+//   const comp = await import(component)
+
+//   return comp(props)
+// }
