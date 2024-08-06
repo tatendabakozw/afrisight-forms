@@ -20,6 +20,7 @@ import {
 import { SortableItem } from "@/components/sortable-item/SortableItem";
 import { useForm } from "@/context/FormContext";
 import { Option } from "@/components/inputs/MultipeChoice";
+import Head from "next/head";
 
 // Define the structure of a section type
 interface SectionType {
@@ -106,25 +107,34 @@ const Home: React.FC = () => {
 
   return (
     <GeneralLayout>
+      <Head>
+        <title>Build Your Form | Afrisight</title>
+      </Head>
       <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
           <div className="flex flex-col space-y-2">
-            <p className="text-zinc-700 font-medium">Form name</p>
+            <p className="text-start font-bold heading-text text-3xl ">
+              {formName ? formName : "Form name"}
+            </p>
             <input
               type="text"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
-              className="bg-zinc-200 p-3 rounded-xl "
+              className="bg-zinc-200 p-3 rounded-xl text-sm "
               placeholder="Give your form a name"
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <p className="text-zinc-700 font-medium">Description</p>
+            <p className="text-start main-text text-sm text-zinc-500 max-w-2xl">
+              {formDescription
+                ? formDescription
+                : "Briefly describe what your form is about"}
+            </p>
             <textarea
-              rows={5}
+              rows={3}
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="bg-zinc-200 p-3 rounded-xl "
+              className="bg-zinc-200 p-3 rounded-xl text-sm "
               placeholder="Write a small description for your form"
             />
           </div>

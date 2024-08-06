@@ -20,8 +20,13 @@ function Navbar({}: Props) {
     };
     setLoading(true);
     const formJSON = JSON.stringify(createdForm, null, 2);
+
+    // Generate a unique identifier using date and form name
+    const date = new Date();
+    const uniqueId = `${date.toISOString()}-${formName.replace(/\s+/g, "-")}`;
+
     try {
-      await setDoc(doc(db, "forms", "createdForms"), { forms: formJSON });
+      await setDoc(doc(db, "forms", uniqueId), { ...createdForm });
       setLoading(false);
       setSuccess(true);
       setError(false);
@@ -31,6 +36,7 @@ function Navbar({}: Props) {
       setError(true);
     }
   };
+
   return (
     <div className="flex flex-col items-center py-4 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
       <div className="flex flex-row items-center max-w-7xl justify-between w-full mx-auto px-4">
