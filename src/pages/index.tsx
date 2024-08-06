@@ -19,21 +19,27 @@ import {
 } from "@dnd-kit/sortable";
 import { SortableItem } from "@/components/sortable-item/SortableItem";
 import { useForm } from "@/context/FormContext";
+import { Option } from "@/components/inputs/MultipeChoice";
 
 // Define the structure of a section type
 interface SectionType {
   name: string;
   type_id: string;
+}
+
+interface Section {
   id: number;
+  type: SectionType;
   value: string;
+  options: Option[];
 }
 
 const initialSectionType: SectionType = {
   name: "Short Answer",
   type_id: "short-answer",
-  id: 0,
-  value: "",
 };
+
+const initialOptions: Option[] = [];
 
 const Home: React.FC = () => {
   const {
@@ -50,10 +56,11 @@ const Home: React.FC = () => {
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
 
   const addNewSection = () => {
-    const newSection = {
+    const newSection: Section = {
       id: sections.length + 1,
       type: initialSectionType,
       value: currentSectionValue,
+      options: initialOptions,
     };
     addSection(newSection);
     setCurrentSectionValue(""); // Reset section value after adding
@@ -69,6 +76,10 @@ const Home: React.FC = () => {
 
   const handleSectionValueChange = (id: number, newValue: string) => {
     updateSection(id, { value: newValue });
+  };
+
+  const handleOptionsChange = (id: number, newOptions: Option[]) => {
+    updateSection(id, { options: newOptions });
   };
 
   const sensors = useSensors(
@@ -136,7 +147,11 @@ const Home: React.FC = () => {
                     handleSectionValueChange={(newValue: string) =>
                       handleSectionValueChange(section.id, newValue)
                     }
+                    handleOptionsChange={(newOptions: Option[]) =>
+                      handleOptionsChange(section.id, newOptions)
+                    }
                     sectionValue={section.value}
+                    options={section.options}
                   />
                 </SortableItem>
               ))}

@@ -6,21 +6,30 @@ import FieldTypeDropdown from "../field-type-dropdown/FieldTypeDropdown";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { FieldType } from "@/lib/types";
 import TextArea from "../inputs/TextArea";
-import MultipeChoice from "../inputs/MultipeChoice";
 import DatePicker from "../inputs/DatePicker";
+import MultipleChoice from "../inputs/MultipeChoice";
+
+type Option = {
+  name: string;
+  _id: string;
+};
 
 interface Props {
   handleDeleteSection: () => void;
   handleSectionTypeChange: (newType: FieldType) => void;
   handleSectionValueChange: (newValue: string) => void;
+  handleOptionsChange: (newOptions: Option[]) => void;
   sectionValue: string;
+  options: Option[];
 }
 
 function FieldSection({
   handleDeleteSection,
   handleSectionTypeChange,
   handleSectionValueChange,
+  handleOptionsChange,
   sectionValue,
+  options,
 }: Props) {
   const [type, setType] = useState<FieldType>(field_types[0]);
 
@@ -46,9 +55,11 @@ function FieldSection({
         );
       case "multiple-choice":
         return (
-          <MultipeChoice
+          <MultipleChoice
             value={sectionValue}
             setValue={handleSectionValueChange}
+            options={options}
+            setOptions={handleOptionsChange}
           />
         );
       case "text-area":

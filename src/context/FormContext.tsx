@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
+interface Option {
+  name: string;
+  _id: string;
+}
+
 interface SectionType {
   name: string;
   type_id: string;
@@ -9,6 +14,7 @@ interface Section {
   id: any;
   type: SectionType;
   value: string;
+  options: Option[]; // Added options property
 }
 
 interface FormContextProps {
@@ -65,13 +71,13 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         sections,
         formName,
+        formDescription,
         addSection,
         updateSection,
         deleteSection,
         saveFormAsJSON,
         updateSectionOrder,
         setFormName,
-        formDescription,
         setFormDescription,
       }}
     >

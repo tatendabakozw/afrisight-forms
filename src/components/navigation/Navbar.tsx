@@ -6,17 +6,22 @@ import { doc, setDoc } from "firebase/firestore";
 type Props = {};
 
 function Navbar({}: Props) {
-  const { sections, formName } = useForm();
+  const { sections, formName, formDescription } = useForm();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const saveItem = async () => {
+    const createdForm = {
+      name: formName,
+      description: formDescription,
+      sections,
+    };
     setLoading(true);
-    const formJSON = JSON.stringify(sections, null, 2);
+    const formJSON = JSON.stringify(createdForm, null, 2);
     try {
-      await setDoc(doc(db, "forms", "myForm"), { sections: formJSON });
+      await setDoc(doc(db, "forms", "createdForms"), { forms: formJSON });
       setLoading(false);
       setSuccess(true);
       setError(false);
