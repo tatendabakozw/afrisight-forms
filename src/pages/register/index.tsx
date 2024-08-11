@@ -57,12 +57,14 @@ function Register() {
           />
           <PrimaryInput
             value={password}
+            type="password"
             setValue={setPassword}
             placeholder="passsword"
             label={"Password"}
           />
           <PrimaryInput
             value={confirm_password}
+            type="password"
             setValue={setConfirmPassword}
             placeholder="confirm password"
             label={"Confirm Password"}
