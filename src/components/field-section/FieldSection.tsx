@@ -8,6 +8,7 @@ import { FieldType } from "@/lib/types";
 import TextArea from "../inputs/TextArea";
 import DatePicker from "../inputs/DatePicker";
 import MultipleChoice from "../inputs/MultipeChoice";
+import FileUpload from "../inputs/FileUpload";
 
 type Option = {
   name: string;
@@ -60,6 +61,13 @@ function FieldSection({
             setValue={handleSectionValueChange}
             options={options}
             setOptions={handleOptionsChange}
+          />
+        );
+      case "file-upload":
+        return (
+          <FileUpload
+            value={sectionValue}
+            setValue={handleSectionValueChange}
           />
         );
       case "text-area":

@@ -114,7 +114,7 @@ const Home: React.FC = () => {
         <div className="max-w-2xl mx-auto w-full space-y-6">
           <div className="flex flex-col space-y-2">
             <p className="text-start font-bold heading-text text-3xl ">
-              {formName ? formName : "Form name"}
+              {formName ? `Name: ${formName}` : "Form name"}
             </p>
             <input
               type="text"
@@ -127,7 +127,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col space-y-2">
             <p className="text-start main-text text-sm text-zinc-500 max-w-2xl">
               {formDescription
-                ? formDescription
+                ? `Description: ${formDescription}`
                 : "Briefly describe what your form is about"}
             </p>
             <textarea
