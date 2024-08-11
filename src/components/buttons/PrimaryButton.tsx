@@ -5,7 +5,7 @@ type Props = {
   text: string;
   loading?: boolean;
   error?: string;
-  success?: string;
+  success?: boolean;
 };
 
 const PrimaryButton = (props: Props) => {
