@@ -5,6 +5,7 @@ type Props = {
   placeholder: string;
   value: string | number;
   setValue: (e: any) => void;
+  type?: "password" | "number" | "text";
 };
 
 function PrimaryInput(props: Props) {
@@ -15,7 +16,7 @@ function PrimaryInput(props: Props) {
       )}
       <input
         placeholder={props.placeholder}
-        type="text"
+        type={props.type ? props.type : "text"}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
         className="border border-zinc-200/50 p-3 rounded-xl w-full"

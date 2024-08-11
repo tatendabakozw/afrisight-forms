@@ -20,7 +20,6 @@ import {
 import { SortableItem } from "@/components/sortable-item/SortableItem";
 import { useForm } from "@/context/FormContext";
 import { Option } from "@/components/inputs/MultipeChoice";
-import Head from "next/head";
 
 // Define the structure of a section type
 interface SectionType {
@@ -107,9 +106,6 @@ const Builder: React.FC = () => {
 
   return (
     <GeneralLayout>
-      <Head>
-        <title>Build Your Form | Afrisight</title>
-      </Head>
       <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
           <div className="flex flex-col space-y-2">

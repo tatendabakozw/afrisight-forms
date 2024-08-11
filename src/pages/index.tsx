@@ -3,10 +3,32 @@ import Link from "next/link";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import PrimaryInput from "@/components/inputs/PrimaryInput";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+import { getMessage } from "@/helpers/getMessage";
+import AlertMessage from "@/components/alerts/AlertMessage";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const [success, setSuccess] = useState("");
+  const { login } = useAuth();
+
+  const loginToDashboard = async () => {
+    setLoading(true);
+    try {
+      await login({ username, password });
+      setSuccess("Login Successful");
+      setErr("");
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setErr(getMessage(error));
+      setSuccess("");
+      setLoading(false);
+    }
+  };
   return (
     <div className="grid md:grid-cols-2 col-span-1 min-h-screen w-full bg-white">
       <div className="col-span-1 grid items-center w-full content-center p-4">
@@ -26,14 +48,15 @@ function Login() {
             </p>
           </div>
           <PrimaryInput
-            value={email}
-            setValue={setEmail}
-            placeholder="email"
-            label={"Email"}
+            value={username}
+            setValue={setUsername}
+            placeholder="username"
+            label={"username"}
           />
           <PrimaryInput
             value={password}
             setValue={setPassword}
+            type="password"
             placeholder="passsword"
             label={"Password"}
           />
@@ -41,7 +64,14 @@ function Login() {
           <p className="text-brand-original text-sm text-end">
             Forgot password
           </p>
-          <PrimaryButton text="Sign In" />
+          {err && <AlertMessage type="error" text={err.toString()} />}
+          <PrimaryButton
+            loading={loading}
+            success={success}
+            error={err}
+            text="Sign In"
+            onClick={loginToDashboard}
+          />
           <div className="text-sm text-center">
             <p>
               Dont have an account{" "}

@@ -2,34 +2,47 @@ import React, { useState } from "react";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import PrimaryInput from "@/components/inputs/PrimaryInput";
 import Link from "next/link";
-import Image from "next/image";
+import AlertMessage from "@/components/alerts/AlertMessage";
+import { useAuth } from "@/context/AuthContext";
+import { getMessage } from "@/helpers/getMessage";
 
 function Register() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm_password, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const { register } = useAuth();
+
+  const registerUserToBuilder = async () => {
+    setLoading(true);
+    try {
+      await register({ username, email, password, confirm_password });
+      setSuccess("Login Successful");
+      setErr("");
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setErr(getMessage(error));
+      setSuccess("");
+      setLoading(false);
+    }
+  };
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen w-full bg-white">
-      <div className="col-span-1 bg-zinc-100 relative mdd:flex hidden items-center justify-center">
+      <div className="col-span-1 bg-zinc-100 relative md:flex hidden items-center justify-center">
         <div className="h-40 w-40 bg-brand-original rounded-full"></div>
         <div className="h-1/2 backdrop-blur-lg w-full absolute bottom-0 "></div>
       </div>
-      <div className="col-span-1 grid items-center w-full content-center p-4">
+      <div className="col-span-1 grid items-center w-full content-center p-6">
         <div className="max-w-md w-full mx-auto flex flex-col space-y-6">
-          <div className="h-20 w-40 relative">
-            <Image
-              src={"/logo.svg"}
-              alt="Afrisight logo"
-              className=" object-contain"
-              fill
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <p className="text-3xl font-bold text-zinc-950">Hello there</p>
-            <p className="text-zinc-600">
-              Create an account to start buildding forms
-            </p>
-          </div>
-
+          <p className="text-3xl font-bold text-zinc-950">Hello there</p>
+          <p className="text-zinc-600">
+            Create an account by entering details below
+          </p>
           <PrimaryInput
             value={email}
             setValue={setEmail}
@@ -37,8 +50,8 @@ function Register() {
             label={"Email"}
           />
           <PrimaryInput
-            value={password}
-            setValue={setPassword}
+            value={username}
+            setValue={setUsername}
             placeholder="username"
             label={"Username"}
           />
@@ -47,6 +60,12 @@ function Register() {
             setValue={setPassword}
             placeholder="passsword"
             label={"Password"}
+          />
+          <PrimaryInput
+            value={confirm_password}
+            setValue={setConfirmPassword}
+            placeholder="confirm password"
+            label={"Confirm Password"}
           />
           <div className="flex items-center">
             <input
@@ -63,7 +82,14 @@ function Register() {
               Agree to terms and conditions
             </label>
           </div>
-          <PrimaryButton text="Sign Up" />
+          {err && <AlertMessage type="error" text={err.toString()} />}
+          <PrimaryButton
+            loading={loading}
+            success={success}
+            error={err}
+            text="Sign In"
+            onClick={registerUserToBuilder}
+          />
           <p className="text-sm text-center">
             <p>
               Already have an account{" "}

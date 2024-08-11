@@ -2,15 +2,20 @@ import { useForm } from "@/context/FormContext";
 import React, { useState } from "react";
 import { db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import PrimaryButton from "../buttons/PrimaryButton";
+import { getMessage } from "@/helpers/getMessage";
 
 type Props = {};
 
 function Navbar({}: Props) {
   const { sections, formName, formDescription } = useForm();
+  const router = useRouter();
+  const currentPath = router.pathname;
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const saveItem = async () => {
     const createdForm = {
@@ -28,12 +33,12 @@ function Navbar({}: Props) {
     try {
       await setDoc(doc(db, "forms", uniqueId), { ...createdForm });
       setLoading(false);
-      setSuccess(true);
-      setError(false);
+      setSuccess("item saved");
+      setError("");
     } catch (error) {
       setLoading(false);
-      setSuccess(false);
-      setError(true);
+      setSuccess("");
+      setError(getMessage(error));
     }
   };
 
@@ -41,30 +46,21 @@ function Navbar({}: Props) {
     <div className="flex flex-col items-center py-4 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
       <div className="flex flex-row items-center max-w-7xl justify-between w-full mx-auto px-4">
         <p className="md:text-lg text-sm font-semibold text-zinc-950">
-          Afrisight Forms
+          Builder
         </p>
         <div className="md:flex hidden space-x-4 flex-row items-center">
           {formName}
         </div>
-        <button
-          disabled={loading}
-          onClick={loading ? () => console.log("loading") : saveItem}
-          className={`${
-            error
-              ? "bg-red-600 "
-              : success
-              ? "bg-green-600 "
-              : "bg-brand-original "
-          } flex  text-white px-4 p-2 rounded-xl`}
-        >
-          {loading
-            ? "loading ..."
-            : error
-            ? "error saving form"
-            : success
-            ? "Successfully saved"
-            : "Create Form"}
-        </button>
+
+        {currentPath === "/builder" && (
+          <PrimaryButton
+            text="Create Form"
+            onClick={saveItem}
+            loading={loading}
+            success={success}
+            error={error}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,15 +1,28 @@
 import React from "react";
 
 type Props = {
+  onClick: () => void;
   text: string;
+  loading?: boolean;
+  error?: string;
+  success?: string;
 };
 
-function PrimaryButton({ text }: Props) {
+const PrimaryButton = (props: Props) => {
   return (
-    <button className=" bg-brand-original text-white p-3 rounded-xl font-medium">
-      {text}
+    <button
+      onClick={props.loading ? () => console.log("loadiing...") : props.onClick}
+      className={`${
+        props.error
+          ? "bg-red-600 "
+          : props.success
+          ? "bg-green-600 "
+          : "bg-brand-original "
+      }  text-white uppercase font-medium rounded-full py-2 px-6`}
+    >
+      {props.loading ? "Loading..." : props.text}
     </button>
   );
-}
+};
 
 export default PrimaryButton;
