@@ -11,7 +11,7 @@ import { field_types } from "@/lib/field_types_data";
 interface FieldType {
   name: string;
   _id: string;
-  Icon: any;
+  Icon?: any;
   type: string;
 }
 
@@ -37,7 +37,9 @@ type FieldTypeDropdownProps = {
 
 function FieldTypeDropdown({ value, setSectionType }: FieldTypeDropdownProps) {
   const handleSelect = (newValue: FieldType) => {
-    setSectionType(newValue);
+    // Destructure the Icon property out of newValue
+    const { Icon, ...rest } = newValue;
+    setSectionType(rest); // Pass the rest of the properties without Icon
   };
 
   return (

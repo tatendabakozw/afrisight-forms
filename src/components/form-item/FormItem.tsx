@@ -25,11 +25,12 @@ const getRandomImage = () => {
 
 function FormItem({ item, list, selected, onClick }: Props) {
   const randomImage = getRandomImage();
+  console.log(item);
   return (
     <div
       className={`${
         selected ? "border-brand-original/50 " : "border-zinc-200/50 "
-      } col-span-1  border  dark:border-zinc-500/50 flex flex-col rounded-2xl overflow-hidden bg-white max-w-xs`}
+      } col-span-1  border  dark:border-zinc-500/50 flex flex-col rounded-2xl overflow-hidden bg-white `}
     >
       <div
         className={`${
@@ -67,7 +68,7 @@ function FormItem({ item, list, selected, onClick }: Props) {
       >
         <div className="flex flex-row items-start w-full">
           <p className="text-sm flex-1 font-bold text-zinc-700 dark:text-zinc-100">
-            {item.form?.name}
+            {item.form.name}
           </p>
           <button className="border border-zinc-300/50 rounded-full p-1 text-zinc-950 top-5 right-5">
             <EllipsisVerticalIcon height={16} width={16} />
@@ -77,11 +78,11 @@ function FormItem({ item, list, selected, onClick }: Props) {
           {5} (est) to complete
         </p>
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-300 line-clamp-3">
-          {item.form?.description}
+          {item.form.description}
         </p>
         <div className="flex-1"></div>
         <div className="flex flex-row flex-1 flex-wrap">
-          {item.form?.sections?.slice(0, 5).map((section: SectionType) => (
+          {item.form.sections.slice(0, 5).map((section: SectionType) => (
             <span
               className="bg-zinc-200 text-xs font-medium mb-2 mr-2 rounded-lg px-2 py-1 dark:bg-zinc-800 dark:text-white text-zinc-950"
               key={section.id}

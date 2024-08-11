@@ -106,7 +106,7 @@ const Builder: React.FC = () => {
 
   return (
     <GeneralLayout>
-      <div className="flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
+      <div className="relative flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
           <div className="flex flex-col space-y-2">
             <p className="text-start font-bold heading-text text-3xl ">
@@ -170,6 +170,22 @@ const Builder: React.FC = () => {
             <PlusIcon height={20} width={20} />
             <p>Add new section</p>
           </button>
+        </div>
+        <div className="fixed flex bottom-20 z-50 w-full">
+          <nav className=" max-w-5xl mx-auto w-full py-2 md:px-4">
+            <div className="z-50 fixed flex max-w-5xl w-full flex-row items-center justify-between">
+              <div className="md:flex hidden logo  h-10 w-10 rounded-full"></div>
+              {/* nav links */}
+              <div className="bg-white mx-auto border border-zinc-400/50 dark:border-zinc-500/50 md:px-8 px-4 py-3 rounded-full">
+                <ul className="flex flex-1  font-medium md:gap-8 gap-4 text-sm text-zinc-700 dark:text-zinc-200">
+                  Add Section
+                  <div className="border-r border-zinc-400/50 dark:border-zinc-600 "></div>
+                  Preview Form
+                </ul>
+              </div>
+              <div className="md:flex hidden h-10 w-10 rounded-full"></div>
+            </div>
+          </nav>
         </div>
       </div>
     </GeneralLayout>

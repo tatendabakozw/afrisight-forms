@@ -11,7 +11,7 @@ type Props = {
 
 function GeneralLayout({ children }: Props) {
   return (
-    <div className="flex flex-col pt-16">
+    <div className="flex flex-col pt-16 antialiased">
       <Head>
         <title>Build Your Form | Afrisight</title>
       </Head>

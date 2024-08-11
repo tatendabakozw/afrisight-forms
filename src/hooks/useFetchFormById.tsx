@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { DocumentType, FormType } from "@/utils/types";
 
 const useFetchFormByUserId = (userId: string) => {
   const [state, setState] = useState<{
-    forms: any[];
+    forms: FormType[];
     loading: boolean;
     error: string | null;
   }>({
@@ -25,10 +26,21 @@ const useFetchFormByUserId = (userId: string) => {
       const q = query(formsRef, where("_id", "==", userId));
       const querySnapshot = await getDocs(q);
 
-      const fetchedForms = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const fetchedForms: FormType[] = querySnapshot.docs.map((doc) => {
+        const data = doc.data() as DocumentType;
+
+        // Ensure the data has the expected structure
+        const { description, name, sections } = data;
+
+        return {
+          id: doc.id,
+          form: {
+            description: description || "",
+            name: name || "",
+            sections: sections || [],
+          },
+        };
+      });
 
       setState({ forms: fetchedForms, loading: false, error: null });
     } catch (err) {
