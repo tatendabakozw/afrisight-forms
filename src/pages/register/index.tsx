@@ -13,7 +13,7 @@ function Register() {
   const [confirm_password, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const { register } = useAuth();
 
@@ -21,13 +21,13 @@ function Register() {
     setLoading(true);
     try {
       await register({ username, email, password, confirm_password });
-      setSuccess("Login Successful");
+      setSuccess(true);
       setErr("");
       setLoading(false);
     } catch (error) {
       console.error(error);
       setErr(getMessage(error));
-      setSuccess("");
+      setSuccess(false);
       setLoading(false);
     }
   };

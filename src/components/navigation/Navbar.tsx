@@ -19,7 +19,7 @@ function Navbar({}: Props) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const saveItem = async () => {
     const createdForm = {
@@ -37,11 +37,11 @@ function Navbar({}: Props) {
       await setDoc(doc(db, "forms", uniqueId), { ...createdForm });
       // console.log(createdForm);
       setLoading(false);
-      setSuccess("Item saved");
+      setSuccess(true);
       setError("");
     } catch (error) {
       setLoading(false);
-      setSuccess("");
+      setSuccess(false);
       console.error(getMessage(error));
       setError(getMessage(error));
     }

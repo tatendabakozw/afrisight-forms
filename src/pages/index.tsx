@@ -12,20 +12,20 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(false);
   const { login } = useAuth();
 
   const loginToDashboard = async () => {
     setLoading(true);
     try {
       await login({ username, password });
-      setSuccess("Login Successful");
+      setSuccess(true);
       setErr("");
       setLoading(false);
     } catch (error) {
       console.error(error);
       setErr(getMessage(error));
-      setSuccess("");
+      setSuccess(false);
       setLoading(false);
     }
   };
