@@ -1,17 +1,10 @@
 import React from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import useForms from "../../hooks/useForms";
 import GeneralLayout from "@/layouts/GeneralLayout";
-import FormItem from "@/components/form-item/FormItem";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
 import GetUserForms from "@/components/forms-containers/GetUserForms";
-import FormLoading from "@/components/forms-containers/FormLoading";
 
 function Forms() {
-  const { forms, loading, error } = useForms();
-  const { logout, user } = useAuth();
-
   return (
     <GeneralLayout>
       <div className="max-w-7xl px-4 py-16 w-full mx-auto space-y-8 ">
@@ -33,10 +26,7 @@ function Forms() {
             </Link>
           </div>
         </div>
-        {/* search and filter */}
         {/* <Search /> */}
-        <FormLoading />
-
         <GetUserForms />
       </div>
     </GeneralLayout>
