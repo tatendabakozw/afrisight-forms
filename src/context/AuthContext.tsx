@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
     Cookies.set("token", response.data.token, { expires: 1 });
     setUser(response.data.user);
-    router.push("/builder");
+    router.push("/forms");
   };
 
   const register = async ({
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
     Cookies.set("token", response.data.token, { expires: 1 });
     setUser(response.data.user);
-    router.push("/builder");
+    router.push("/forms");
   };
 
   const logout = () => {

@@ -4,9 +4,13 @@ import useForms from "../../hooks/useForms";
 import GeneralLayout from "@/layouts/GeneralLayout";
 import FormItem from "@/components/form-item/FormItem";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import GetUserForms from "@/components/forms-containers/GetUserForms";
+import FormLoading from "@/components/forms-containers/FormLoading";
 
 function Forms() {
   const { forms, loading, error } = useForms();
+  const { logout, user } = useAuth();
 
   return (
     <GeneralLayout>
@@ -31,26 +35,9 @@ function Forms() {
         </div>
         {/* search and filter */}
         {/* <Search /> */}
-        <div className="max-w-7xl w-full mx-auto">
-          {loading && (
-            <div className="text-center w-full h-96 justify-center flex items-center">
-              loading...
-            </div>
-          )}
-          {error && (
-            <div className="text-center w-full h-96 justify-center flex items-center">
-              {error}
-            </div>
-          )}
-          <div className=" flex-row grid md:grid-cols-4 gap-8 grid-cols-1">
-            {forms.map((item) => (
-              <FormItem
-                key={item.id}
-                item={item} // Spread the properties to match the FormItem props
-              />
-            ))}
-          </div>
-        </div>
+        <FormLoading />
+
+        <GetUserForms />
       </div>
     </GeneralLayout>
   );
