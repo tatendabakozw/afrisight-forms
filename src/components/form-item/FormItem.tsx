@@ -5,6 +5,9 @@ import { PlayIcon } from "@heroicons/react/24/solid";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
+import crypto from "crypto";
+
+
 type Props = {
   item: FormType;
   list?: boolean;
@@ -28,20 +31,17 @@ function FormItem({ item, list, selected, onClick }: Props) {
   console.log(item);
   return (
     <div
-      className={`${
-        selected ? "border-brand-original/50 " : "border-zinc-200/50 "
-      } col-span-1  border  dark:border-zinc-500/50 flex flex-col rounded-2xl overflow-hidden bg-white `}
+      className={`${selected ? "border-brand-original/50 " : "border-zinc-200/50 "
+        } col-span-1  border dark:border-zinc-500/50 flex flex-col rounded-2xl overflow-hidden bg-white `}
     >
       <div
-        className={`${
-          list ? "h-20 p-2 mb-4" : "h-40 p-4 "
-        }bg-white w-full relative border-b border-zinc-200/50`}
+        className={`${list ? "h-20 p-2 mb-4" : "h-40 p-4 "
+          }bg-white w-full relative border-b border-zinc-200/50`}
       >
         <div
           onClick={onClick}
-          className={`${
-            list ? "h-28 " : "h-36 "
-          }bg-zinc-100 relative w-full overflow-hidden rounded-t-lg`}
+          className={`${list ? "h-28 " : "h-36 "
+            }bg-zinc-100 relative w-full overflow-hidden rounded-t-lg`}
         >
           <Image
             src={randomImage}
@@ -54,17 +54,15 @@ function FormItem({ item, list, selected, onClick }: Props) {
         </div>
         <Link
           href={`/forms/${item.id}`}
-          className={`${
-            selected ? "bg-brand-original " : "bg-zinc-950  "
-          } rounded-full p-2 absolute text-white top-5 right-5`}
+          className={`${selected ? "bg-brand-original " : "bg-zinc-950  "
+            } rounded-full p-2 absolute text-white top-5 right-5`}
         >
           <PlayIcon height={12} width={12} />
         </Link>
       </div>
       <div
-        className={`${
-          list ? "mt-8 " : ""
-        } flex flex-col bg-white space-y-2 p-4`}
+        className={`${list ? "mt-8 " : ""
+          } flex flex-col bg-white space-y-2 p-4`}
       >
         <div className="flex flex-row items-start w-full">
           <p className="text-sm flex-1 font-bold text-zinc-700 dark:text-zinc-100">

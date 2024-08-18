@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("./design-sytem/typography.css");
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -66,4 +68,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-size: var(--paragraph);
 }
