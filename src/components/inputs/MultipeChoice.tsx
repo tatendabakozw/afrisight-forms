@@ -1,5 +1,6 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
+import { Input } from "../ui/Input";
 
 export type Option = {
   name: string;
@@ -13,9 +14,8 @@ type Props = {
   setOptions: (options: Option[]) => void;
 };
 
-const MultipleChoice = ({ value, setValue, options, setOptions }: Props) => {
+const MultipleChoice = ({ options, setOptions }: Props) => {
   const [newOptionName, setNewOptionName] = useState("");
-  const [questionClicked, setQuestionClicked] = useState(false);
 
   const handleAddOption = () => {
     if (newOptionName.trim()) {
@@ -40,38 +40,15 @@ const MultipleChoice = ({ value, setValue, options, setOptions }: Props) => {
 
   return (
     <div className="flex flex-col">
-      {questionClicked ? (
-        <div className="flex flex-row items-center gap-4">
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Question"
-            className="bg-zinc-100 border w-full border-zinc-200/50 py-2 text-sm px-4 rounded-xl gap-4 flex-1"
-          />
-          <button
-            onClick={() => setQuestionClicked(false)}
-            className="bg-brand-original flex-shrink-0 text-white p-2 rounded-lg text-sm font-semibold"
-          >
-            Save
-          </button>
-        </div>
-      ) : (
-        <div
-          onClick={() => setQuestionClicked(true)}
-          className="text-zinc-500 text-sm"
-        >
-          {value ? value : "Click here to change question"}
-        </div>
-      )}
+
       {options.map((option, index) => (
         <div key={option._id} className="flex flex-row items-center gap-2 py-2">
           <div className="h-4 w-4 border-2 border-zinc-400/50 rounded-full" />
-          <input
+          <Input
             type="text"
             value={option.name}
             onChange={(e) => handleOptionChange(index, e.target.value)}
-            className="text-sm text-zinc-700 bg-transparent border-b border-dashed border-zinc-400/50 focus:outline-none"
+            className="w-full text-zinc-700 bg-transparent border-b border-dashed border-zinc-400/50 focus:outline-none"
           />
           <button
             onClick={() => handleDeleteOption(index)}
@@ -81,17 +58,17 @@ const MultipleChoice = ({ value, setValue, options, setOptions }: Props) => {
           </button>
         </div>
       ))}
-      <div className="flex flex-row gap-2 mt-2">
-        <input
+      <div className="flex flex-row gap-2 mt-2 border-t border-zinc-400/30 pt-4">
+        <Input
           type="text"
           placeholder="Enter new option"
           value={newOptionName}
           onChange={(e) => setNewOptionName(e.target.value)}
-          className="bg-zinc-100 border w-full border-zinc-200/50 py-2 px-4 rounded-xl"
+          className="bg-zinc-100 border w-full ml-6 border-zinc-200/50 py-2 px-4 rounded-xl"
         />
         <button
           onClick={handleAddOption}
-          className="bg-brand-original flex-shrink-0 text-white p-2 rounded-full text-xs font-semibold"
+          className="bg-blue-600 flex-shrink-0 text-white p-2 rounded-full text-xs font-semibold"
         >
           <PlusIcon height={24} width={24} />
         </button>

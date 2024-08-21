@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useId } from "react";
+import { Input } from "../ui/Input";
 
 type Props = {
   value: string;
@@ -6,19 +7,16 @@ type Props = {
 };
 
 function ShortAnswer({ value, setValue }: Props) {
+  const id = useId();
   return (
-    <div className="flex flex-col space-y-2">
-      <p className="text-sm text-zinc-500">
-        Question: {value ? `${value}?` : "Type question below"}
-      </p>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Question"
-        className="bg-zinc-100 border w-full border-zinc-200/50 py-2 px-4 rounded-xl flex-1"
-      />
-    </div>
+
+    <Input
+      type="text"
+      name={id}
+      disabled
+      placeholder="Enter your answer"
+      className="cursor-disabled bg-zinc-100 border w-full border-zinc-200/50 py-2 px-4 rounded-xl flex-1"
+    />
   );
 }
 

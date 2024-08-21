@@ -1,5 +1,6 @@
 import { CalendarDateRangeIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
+import { Input } from "../ui/Input";
 
 type Props = {
   value: string;
@@ -12,7 +13,7 @@ function DatePicker({ value, setValue }: Props) {
     <div className="flex flex-col gap-4">
       {questionClicked ? (
         <div className="flex flex-row items-center gap-4">
-          <input
+          <Input
             type="text"
             value={value}
             onChange={(e) => setValue(e.target.value)}

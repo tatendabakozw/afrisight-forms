@@ -22,6 +22,7 @@ import { useForm } from "@/context/FormContext";
 import { Option } from "@/components/inputs/MultipeChoice";
 import Modal, { useDisclosure } from "@/components/ui/dialog";
 import BuilderLayout from "@/layouts/BuilderLayout";
+import { Input, Textarea } from "@/components/ui/Input";
 
 // Define the structure of a section type
 interface SectionType {
@@ -48,6 +49,11 @@ const Builder: React.FC = () => {
     open: formSettingsOpen,
     onOpen: openFormSettings,
     onClose: closeFormSettings,
+  } = useDisclosure();
+  const {
+    open: previewOpen,
+    onOpen: openPreview,
+    onClose: closePreview,
   } = useDisclosure();
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
   const {
@@ -112,7 +118,8 @@ const Builder: React.FC = () => {
   };
 
   return (
-    <BuilderLayout title={formName} description={formDescription} openSettingsModal={openFormSettings}>
+    <BuilderLayout title={formName} description={formDescription} openSettingsModal={openFormSettings} openPreviewModal={openPreview}>
+      <FormPreview open={previewOpen} onClose={closePreview} />
       <FormSettingsModal
         formSettingsOpen={formSettingsOpen}
         closeFormSettings={closeFormSettings}
@@ -222,12 +229,11 @@ function FormSettingsModal({
           <label htmlFor="formTitle" className="text-start">
             Title
           </label>
-          <input
+          <Input
             type="text"
             name="formTitle"
             value={formName}
             onChange={(e) => setFormName(e.target.value)}
-            className="bg-white h-[40px] px-3 rounded-md border border-zinc-400/30 outline-blue-500 outline-offset-1"
             placeholder="Descriptive name of form"
           />
         </div>
@@ -238,12 +244,11 @@ function FormSettingsModal({
           >
             Description
           </label>
-          <textarea
+          <Textarea
             name="formDescription"
             rows={3}
             value={formDescription}
             onChange={(e) => setFormDescription(e.target.value)}
-            className="bg-white p-3 rounded-md shadow-sm border border-zinc-400/30 outline-blue-500 outline-offset-1"
             placeholder="Write a small description for your form"
           />
         </div>
@@ -265,4 +270,17 @@ function FormSettingsModal({
       </form>
     </Modal>
   );
+}
+
+function FormPreview(props: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <Modal className="max-w-screen-xl top-24" open={props.open} onClose={props.onClose}>
+      <div>
+
+      </div>
+    </Modal>
+  )
 }

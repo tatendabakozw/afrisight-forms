@@ -39,11 +39,13 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
   const [formName, setFormName] = useState<string>("");
   const [formDescription, setFormDescription] = useState<string>("");
 
+
   const addSection = (section: Section) => {
     setSections((prevSections) => [...prevSections, section]);
   };
 
   const updateSection = (id: number, newValue: Partial<Section>) => {
+    console.log({ id, newValue })
     setSections((prevSections) =>
       prevSections.map((section) =>
         section.id === id ? { ...section, ...newValue } : section

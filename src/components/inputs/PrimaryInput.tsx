@@ -1,4 +1,5 @@
 import React from "react";
+import { Input } from "../ui/Input";
 
 type Props = {
   label?: string;
@@ -14,12 +15,11 @@ function PrimaryInput(props: Props) {
       {props.label && (
         <p className="text-zinc-600 font-mdeium text-sm">{props.label}</p>
       )}
-      <input
+      <Input
         placeholder={props.placeholder}
         type={props.type ? props.type : "text"}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
-        className="border border-zinc-200/50 p-3 rounded-xl w-full"
       />
     </div>
   );

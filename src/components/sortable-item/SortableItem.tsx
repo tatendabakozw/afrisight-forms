@@ -1,7 +1,6 @@
-import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ArrowLongDownIcon, ArrowLongUpIcon } from "@heroicons/react/16/solid";
+import { DragIcon } from "../icons/drag";
 
 export function SortableItem(props: any) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -13,19 +12,19 @@ export function SortableItem(props: any) {
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
-      <div
+    <div
+      className="bg-white rounded-xl p-4 pl-2 space-x-3 flex items-start shadow"
+      ref={setNodeRef}
+      style={style}
+    >
+      <button
         {...attributes}
         {...listeners}
         style={{ touchAction: "none" }}
-        className="cursor-move p-1 bg-white  border border-zinc-200/50 rounded-xl w-1/3 mx-auto"
+        className="cursor-move w-[32px] h-[32px] -mt-1 rounded-md text-zinc-300 hover:text-zinc-700 hover:bg-zinc-400/20 flex justify-center items-center transition-all"
       >
-        <div className="flex w-14 flex-row items-center self-center mx-auto text-zinc-300">
-          <ArrowLongDownIcon height={12} width={12} />
-          <div className=" flex-1 h-1 rounded-full  bg-zinc-200 mx-auto" />
-          <ArrowLongUpIcon height={12} width={12} />
-        </div>
-      </div>
+        <DragIcon className="h-6 w-6 " />
+      </button>
       {props.children}
     </div>
   );

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ export default function Modal(props: {
     children: React.ReactNode;
     title?: string;
     description?: string;
+    className?: string;
 }) {
     return (
         <Dialog.Root
@@ -22,8 +24,8 @@ export default function Modal(props: {
             onOpenChange={(open) => !open && props.onClose()}
         >
             <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-zinc-900/40 backdrop-blur" />
-                <Dialog.Content className="fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[512px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[24px]">
+                <Dialog.Overlay className="fixed inset-0 bg-zinc-900/40 backdrop-blur z-40" />
+                <Dialog.Content className={cn("fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[512px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[24px] z-50", props.className)}>
                     <div className="w-full">
                         {props.title && <Dialog.Title style={{ fontSize: `var(--heading-4)` }} className="font-bold tracking-tight">{props.title}</Dialog.Title>}
                         {props.description && (
