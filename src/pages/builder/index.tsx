@@ -20,6 +20,8 @@ import {
 import { SortableItem } from "@/components/sortable-item/SortableItem";
 import { useForm } from "@/context/FormContext";
 import { Option } from "@/components/inputs/MultipeChoice";
+import Modal, { useDisclosure } from "@/components/ui/dialog";
+import BuilderLayout from "@/layouts/BuilderLayout";
 
 // Define the structure of a section type
 interface SectionType {
@@ -42,6 +44,11 @@ const initialSectionType: SectionType = {
 const initialOptions: Option[] = [];
 
 const Builder: React.FC = () => {
+  const {
+    open: formSettingsOpen,
+    onOpen: openFormSettings,
+    onClose: closeFormSettings,
+  } = useDisclosure();
   const [currentSectionValue, setCurrentSectionValue] = useState<string>("");
   const {
     sections,
@@ -105,35 +112,18 @@ const Builder: React.FC = () => {
   };
 
   return (
-    <GeneralLayout>
+    <BuilderLayout title={formName} description={formDescription} openSettingsModal={openFormSettings}>
+      <FormSettingsModal
+        formSettingsOpen={formSettingsOpen}
+        closeFormSettings={closeFormSettings}
+        formName={formName}
+        setFormName={setFormName}
+        formDescription={formDescription}
+        setFormDescription={setFormDescription}
+      />
+
       <div className="relative flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
-          <div className="flex flex-col space-y-2">
-            <p className="text-start font-bold heading-text text-3xl ">
-              {formName ? `Name: ${formName}` : "Form name"}
-            </p>
-            <input
-              type="text"
-              value={formName}
-              onChange={(e) => setFormName(e.target.value)}
-              className="bg-zinc-200 p-3 rounded-xl text-sm "
-              placeholder="Give your form a name"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <p className="text-start main-text text-sm text-zinc-500 max-w-2xl">
-              {formDescription
-                ? `Description: ${formDescription}`
-                : "Briefly describe what your form is about"}
-            </p>
-            <textarea
-              rows={3}
-              value={formDescription}
-              onChange={(e) => setFormDescription(e.target.value)}
-              className="bg-zinc-200 p-3 rounded-xl text-sm "
-              placeholder="Write a small description for your form"
-            />
-          </div>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -165,31 +155,114 @@ const Builder: React.FC = () => {
           </DndContext>
           <button
             onClick={addNewSection}
-            className="bg-brand-original/20 border border-dashed w-full items-center content-center justify-center flex flex-row space-x-4 border-brand-original p-8 rounded-xl"
+            className="bg-zinc-400/10 w-full items-center content-center justify-center transition-all duration-300 hover:shadow flex flex-row space-x-4 p-8 rounded-xl border border-zinc-400/30 shadow-sm hover:bg-white"
           >
             <PlusIcon height={20} width={20} />
-            <p>Add new section</p>
+            <p>Add section</p>
           </button>
         </div>
-        <div className="fixed flex bottom-20 z-50 w-full">
-          <nav className=" max-w-5xl mx-auto w-full py-2 md:px-4">
-            <div className="z-50 fixed flex max-w-5xl w-full flex-row items-center justify-between">
-              <div className="md:flex hidden logo  h-10 w-10 rounded-full"></div>
-              {/* nav links */}
-              <div className="bg-white mx-auto border border-zinc-400/50 dark:border-zinc-500/50 md:px-8 px-4 py-3 rounded-full">
-                <ul className="flex flex-1  font-medium md:gap-8 gap-4 text-sm text-zinc-700 dark:text-zinc-200">
-                  Add Section
-                  <div className="border-r border-zinc-400/50 dark:border-zinc-600 "></div>
-                  Preview Form
-                </ul>
-              </div>
-              <div className="md:flex hidden h-10 w-10 rounded-full"></div>
-            </div>
-          </nav>
-        </div>
       </div>
-    </GeneralLayout>
+    </BuilderLayout>
   );
 };
 
 export default Builder;
+
+function FormSettingsModal({
+  formSettingsOpen,
+  closeFormSettings,
+  formName,
+  setFormName,
+  formDescription,
+  setFormDescription,
+}: {
+  formSettingsOpen: boolean;
+  closeFormSettings: () => void;
+  formName: string;
+  setFormName: (name: string) => void;
+  formDescription: string;
+  setFormDescription: (name: string) => void;
+}) {
+
+  const [initialValues,] = useState({
+    formName,
+    formDescription,
+  })
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const title = e.currentTarget.formTitle.value;
+    const description = e.currentTarget.formDescription.value;
+    // Use the title and description as needed
+
+    setFormName(title);
+    setFormDescription(description);
+
+    closeFormSettings();
+  };
+
+  const onClose = () => {
+    if (!formName) {
+      setFormName(initialValues.formName);
+    }
+    if (!formDescription) {
+      setFormDescription(initialValues.formDescription);
+    }
+    closeFormSettings();
+  }
+
+  return (
+    <Modal
+      title="Form settings"
+      open={formSettingsOpen}
+      onClose={onClose}
+    >
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="formTitle" className="text-start">
+            Title
+          </label>
+          <input
+            type="text"
+            name="formTitle"
+            value={formName}
+            onChange={(e) => setFormName(e.target.value)}
+            className="bg-white h-[40px] px-3 rounded-md border border-zinc-400/30 outline-blue-500 outline-offset-1"
+            placeholder="Descriptive name of form"
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <label
+            htmlFor="formDescription"
+            className="text-start main-text max-w-2xl"
+          >
+            Description
+          </label>
+          <textarea
+            name="formDescription"
+            rows={3}
+            value={formDescription}
+            onChange={(e) => setFormDescription(e.target.value)}
+            className="bg-white p-3 rounded-md shadow-sm border border-zinc-400/30 outline-blue-500 outline-offset-1"
+            placeholder="Write a small description for your form"
+          />
+        </div>
+        <div className="flex gap-6 mt-8">
+          <button
+            onClick={onClose}
+            type="button"
+            className="border border-zinc-400/30 text-zinc-600 rounded-md px-3 h-[40px]"
+          >
+            Cancel
+          </button>
+          <button
+            type={"submit"}
+            className="w-full h-[40px] flex-1 rounded-md bg-blue-600 text-white p-2"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
