@@ -30,6 +30,7 @@ interface Props {
   options: Option[];
 }
 
+
 function FieldSection({
   handleDeleteSection,
   handleSectionTypeChange,
@@ -147,7 +148,16 @@ function FieldSection({
               </p>
               <p className="text-zinc-950 font-semibold">{type.name}</p>
             </div>
-            <Switch name={"required"} label={"Required"} />
+            <div className="flex space-x-4">
+              <Switch name={"required"} label={"Required"} />
+              <button
+                type="button"
+                onClick={handleDeleteSection}
+                className="self-end rounded-full p-2 text-red-600"
+              >
+                <TrashIcon height={20} width={20} />
+              </button>
+            </div>
           </div>
           <div className="p-4 rounded-md bg-zinc-100">
             <div className="w-full gap-4 mb-4">
@@ -176,13 +186,9 @@ function FieldSection({
             </div>
           </div>
           <div className="flex justify-between w-full gap-4">
-            <button
-              type="button"
-              onClick={handleDeleteSection}
-              className="bg-red-50 self-end rounded-full p-2 text-red-600"
-            >
-              <TrashIcon height={20} width={20} />
-            </button>
+            <Button type="button" onClick={toggleEditing} colorScheme={"ghost"} className="px-6">
+              Cancel
+            </Button>
             <Button type="submit" colorScheme={"action"} className="px-6">
               Save
             </Button>

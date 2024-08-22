@@ -1,4 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import crypto from "crypto";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+
+export type SectionKey = "short-answer" | "date" | "multiple-choice" | "file-upload" | "text-area" | "paragraph";
 
 interface Option {
   name: string;
@@ -68,6 +74,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     setSections(newSections);
   };
 
+  console.log({ sections })
+
   return (
     <FormContext.Provider
       value={{
@@ -94,4 +102,36 @@ export const useForm = () => {
     throw new Error("useForm must be used within a FormProvider");
   }
   return context;
+};
+
+export const saveItem = async ({
+  formName,
+  formDescription,
+  sections,
+  user,
+}: {
+  formName: string;
+  formDescription: string;
+  sections: Section[];
+  user: any;
+}) => {
+  const uniqueId = crypto.randomBytes(16).toString("hex");
+
+  const createdForm = {
+    name: formName,
+    description: formDescription,
+    sections,
+    _id: user?._id || "", // Include the user ID
+  };
+  // remove the Icon in every 1 of createdForm.sections[i].type
+  createdForm.sections = createdForm.sections.map((section) => {
+    const newSection = { ...section };
+    // @ts-ignore
+    delete newSection.type.Icon;
+    return newSection;
+  });
+
+
+  await setDoc(doc(db, "forms", uniqueId), { ...createdForm });
+
 };

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FieldSection from "@/components/field-section/FieldSection";
-import GeneralLayout from "@/layouts/GeneralLayout";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   DndContext,
@@ -18,16 +17,18 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "@/components/sortable-item/SortableItem";
-import { useForm } from "@/context/FormContext";
+import { saveItem, useForm } from "@/context/FormContext";
 import { Option } from "@/components/inputs/MultipeChoice";
 import Modal, { useDisclosure } from "@/components/ui/dialog";
 import BuilderLayout from "@/layouts/BuilderLayout";
 import { Input, Textarea } from "@/components/ui/Input";
+import { useAuth } from "@/context/AuthContext";
 
 // Define the structure of a section type
 interface SectionType {
   name: string;
   type_id: string;
+  _id?: string;
 }
 
 interface Section {
@@ -117,9 +118,18 @@ const Builder: React.FC = () => {
     }
   };
 
+
+  useEffect(() => {
+    if (!formName) openFormSettings()
+  }, [formName])
+
   return (
-    <BuilderLayout title={formName} description={formDescription} openSettingsModal={openFormSettings} openPreviewModal={openPreview}>
-      <FormPreview open={previewOpen} onClose={closePreview} />
+    <BuilderLayout
+      title={formName}
+      description={formDescription}
+      openSettingsModal={openFormSettings}
+      openPreviewModal={openPreview}
+    >
       <FormSettingsModal
         formSettingsOpen={formSettingsOpen}
         closeFormSettings={closeFormSettings}
@@ -162,7 +172,7 @@ const Builder: React.FC = () => {
           </DndContext>
           <button
             onClick={addNewSection}
-            className="bg-zinc-400/10 w-full items-center content-center justify-center transition-all duration-300 hover:shadow flex flex-row space-x-4 p-8 rounded-xl border border-zinc-400/30 shadow-sm hover:bg-white"
+            className="bg-zinc-900 text-white w-full items-center content-center justify-center transition-all duration-300 hover:shadow flex flex-row space-x-4 h-[40px] rounded-xl border border-zinc-400/30 shadow-s"
           >
             <PlusIcon height={20} width={20} />
             <p>Add section</p>
@@ -190,21 +200,31 @@ function FormSettingsModal({
   formDescription: string;
   setFormDescription: (name: string) => void;
 }) {
-
-  const [initialValues,] = useState({
+  const { user } = useAuth();
+  const [initialValues] = useState({
     formName,
     formDescription,
-  })
+  });
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
+
     const title = e.currentTarget.formTitle.value;
     const description = e.currentTarget.formDescription.value;
     // Use the title and description as needed
 
+    if (!initialValues.formName) {
+      saveItem({
+        formName: title,
+        formDescription: description,
+        sections: [],
+        user: user?._id
+      })
+    }
+
     setFormName(title);
     setFormDescription(description);
-
     closeFormSettings();
   };
 
@@ -216,14 +236,10 @@ function FormSettingsModal({
       setFormDescription(initialValues.formDescription);
     }
     closeFormSettings();
-  }
+  };
 
   return (
-    <Modal
-      title="Form settings"
-      open={formSettingsOpen}
-      onClose={onClose}
-    >
+    <Modal title="Form settings" open={formSettingsOpen} onClose={onClose}>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col space-y-2">
           <label htmlFor="formTitle" className="text-start">
@@ -272,15 +288,3 @@ function FormSettingsModal({
   );
 }
 
-function FormPreview(props: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  return (
-    <Modal className="max-w-screen-xl top-24" open={props.open} onClose={props.onClose}>
-      <div>
-
-      </div>
-    </Modal>
-  )
-}

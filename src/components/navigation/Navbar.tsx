@@ -11,7 +11,7 @@ import Link from "next/link";
 
 type Props = {};
 
-function Navbar({}: Props) {
+function Navbar({ }: Props) {
   const { sections, formName, formDescription } = useForm();
   const router = useRouter();
   const currentPath = router.pathname;
@@ -50,23 +50,21 @@ function Navbar({}: Props) {
   return (
     <div className="flex flex-col items-center py-4 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
       <div className="flex flex-row items-center max-w-7xl justify-between w-full mx-auto px-4 space-x-4">
-        <div className="flex flex-row items-center space-x-4">
+        <div className="flex flex-row items-center">
           <Link
-            href={"/"}
-            className="md:text-lg text-sm font-semibold text-zinc-950"
+            href={"#"}
+            className="font-semibold text-zinc-950"
           >
-            Builder
+            Form Builder
           </Link>
           <Link
             href={"/forms"}
-            className="md:flex hidden text-sm font-medium space-x-4 flex-row items-center"
+            className="md:flex hidden ml-8 flex-row items-center"
           >
             Forms
           </Link>
         </div>
-        <div className="md:flex hidden space-x-4 flex-row items-center">
-          {formName}
-        </div>
+
         <div className="flex flex-row items-center space-x-4">
           {currentPath === "/builder" && (
             <PrimaryButton

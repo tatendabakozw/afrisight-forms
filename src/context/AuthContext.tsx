@@ -10,6 +10,20 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { apiUrl } from "../utils/apiUrl";
 import { User } from "@/utils/types";
+import crypto from "crypto";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+type Organization = {
+  id: string;
+  name: string;
+}
+
+type EntityMetadata = {
+  org_id: string;
+  user_id: string;
+  invited_by: string | null;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -57,7 +71,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       password,
     });
     Cookies.set("token", response.data.token, { expires: 1 });
-    setUser(response.data.user);
+    console.log(response.data.user._id)
+    const userDoc = await getDoc(doc(db, "users", response.data.user._id));
+    if (!userDoc.exists()) {
+      const org = createOrganization();
+      const metaData: EntityMetadata = {
+        org_id: org.id,
+        user_id: response.data.user._id,
+        invited_by: null,
+      }
+      const orgDoc = doc(db, "organizations", org.id)
+      setDoc(orgDoc, org);
+      setDoc(doc(db, "users", response.data.user._id), { ...response.data.user, ...metaData });
+      setUser({ ...response.data.user, ...metaData });
+    } else {
+      setUser({ ...response.data.user, ...userDoc.data() });
+    }
     router.push("/forms");
   };
 
@@ -79,7 +108,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email,
     });
     Cookies.set("token", response.data.token, { expires: 1 });
-    setUser(response.data.user);
+
+    const org = createOrganization();
+    const metaData: EntityMetadata = {
+      org_id: org.id,
+      user_id: response.data.user._id,
+      invited_by: null,
+    }
+
+    const orgDoc = doc(db, "organizations", org.id)
+    await setDoc(orgDoc, org);
+
+    const userDoc = doc(db, "users", response.data.user._id)
+    await setDoc(userDoc, { ...response.data.user, ...metaData });
+
+    setUser({
+      ...response.data.user,
+      ...metaData
+    });
     router.push("/forms");
   };
 
@@ -103,3 +149,13 @@ export const useAuth = () => {
   }
   return context;
 };
+
+
+const createOrganization = () => {
+  const org: Organization = {
+    id: crypto.randomBytes(16).toString("hex"),
+    name: "My Organization",
+  }
+
+  return org;
+}
