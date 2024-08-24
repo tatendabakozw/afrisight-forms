@@ -22,6 +22,8 @@ function GetUserForms() {
   if (error) {
     return <p>{error}</p>;
   }
+
+  console.log({ forms })
   return (
     <div className="max-w-7xl w-full mx-auto">
       {loading && (
