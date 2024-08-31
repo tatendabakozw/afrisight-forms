@@ -10,6 +10,8 @@ import crypto from "crypto";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { axiosInstance, FORM_ROUTES } from "@/utils/apiUrl";
+
 
 export default function BuilderNavbar(props: {
     title: string;
@@ -17,22 +19,25 @@ export default function BuilderNavbar(props: {
     openSettingsModal: () => void;
     openPreviewModal: () => void;
 }) {
+    const router = useRouter();
+    const { id } = router.query
     const { sections, formName, formDescription } = useForm();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
     const { logout, user } = useAuth();
-    const router = useRouter();
+
+    console.log({ sections })
 
     useEffect(() => {
-        if (success) router.push("/forms");
+        // if (success) router.push("/forms");
     }, [success])
 
     const onSaveToFirebase = async () => {
         try {
             setLoading(true);
-            await saveItem({ formName, formDescription, sections, user });
+            await axiosInstance.put(FORM_ROUTES.UPDATE(id as string), { sections: JSON.stringify(sections) })
             setLoading(false);
             setSuccess(true);
         } catch (error) {

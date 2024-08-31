@@ -8,7 +8,7 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { apiUrl } from "../utils/apiUrl";
+import { apiUrl, AUTH_ROUTES } from "../utils/apiUrl";
 import { User } from "@/utils/types";
 import crypto from "crypto";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -66,28 +66,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     username: string;
     password: string;
   }) => {
-    const response = await axios.post(`${apiUrl}/auth/login`, {
-      username,
+    const response = await axios.post(`${apiUrl}${AUTH_ROUTES.LOGIN}`, {
+      email: username,
       password,
     });
-    Cookies.set("token", response.data.token, { expires: 1 });
-    console.log(response.data.user._id)
-    const userDoc = await getDoc(doc(db, "users", response.data.user._id));
-    if (!userDoc.exists()) {
-      const org = createOrganization();
-      const metaData: EntityMetadata = {
-        org_id: org.id,
-        user_id: response.data.user._id,
-        invited_by: null,
-      }
-      const orgDoc = doc(db, "organizations", org.id)
-      setDoc(orgDoc, org);
-      setDoc(doc(db, "users", response.data.user._id), { ...response.data.user, ...metaData });
-      setUser({ ...response.data.user, ...metaData });
+    const { accessToken, refreshToken, ...userInfo } = response.data;
+
+    if (userInfo.role === "CLIENT") {
+      setUser(userInfo)
+      localStorage.setItem("access_token", accessToken)
+      localStorage.setItem("refresh_token", refreshToken)
+      router.push("/forms");
     } else {
-      setUser({ ...response.data.user, ...userDoc.data() });
+      throw new Error("You are not a CLIENT")
     }
-    router.push("/forms");
   };
 
   const register = async ({
@@ -101,36 +93,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     confirm_password: string;
     email: string;
   }) => {
-    const response = await axios.post(`${apiUrl}/auth/register`, {
+    const response = await axios.post(`${apiUrl}${AUTH_ROUTES.CREATE_USER}`, {
       username,
       password,
       confirm_password, // Include confirm_password in the API request
       email,
+      role: "CLIENT"
     });
-    Cookies.set("token", response.data.token, { expires: 1 });
 
-    const org = createOrganization();
-    const metaData: EntityMetadata = {
-      org_id: org.id,
-      user_id: response.data.user._id,
-      invited_by: null,
-    }
-
-    const orgDoc = doc(db, "organizations", org.id)
-    await setDoc(orgDoc, org);
-
-    const userDoc = doc(db, "users", response.data.user._id)
-    await setDoc(userDoc, { ...response.data.user, ...metaData });
-
-    setUser({
-      ...response.data.user,
-      ...metaData
-    });
+    const { accessToken, refreshToken, ...userInfo } = response.data;
+    localStorage.setItem("access_token", accessToken)
+    localStorage.setItem("refresh_token", refreshToken)
+    Cookies.set("token", response.data.accessToken, { expires: 1 });
+    setUser(userInfo);
     router.push("/forms");
   };
 
   const logout = () => {
     Cookies.remove("token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     setUser(null);
     router.push("/");
   };

@@ -17,35 +17,30 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "@/components/sortable-item/SortableItem";
-import { saveItem, useForm } from "@/context/FormContext";
-import { Option } from "@/components/inputs/MultipeChoice";
+import { useForm } from "@/context/FormContext";
 import Modal, { useDisclosure } from "@/components/ui/dialog";
 import BuilderLayout from "@/layouts/BuilderLayout";
 import { Input, Textarea } from "@/components/ui/Input";
-import { useAuth } from "@/context/AuthContext";
-
-// Define the structure of a section type
-interface SectionType {
-  name: string;
-  type_id: string;
-  _id?: string;
-}
-
-interface Section {
-  id: number;
-  type: SectionType;
-  value: string;
-  options: Option[];
-}
+import { axiosInstance, FORM_ROUTES } from "@/utils/apiUrl";
+import { FormInput, Option, Section, SectionType, TSectionType } from "@/utils/types";
+import { useRouter } from "next/router";
 
 const initialSectionType: SectionType = {
-  name: "Short Answer",
-  type_id: "short-answer",
+  id: 0,
+  options: [],
+  value: "",
+  type: {
+    name: "Short answer",
+    id: "short-answer",
+  },
 };
 
 const initialOptions: Option[] = [];
 
 const Builder: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const {
     open: formSettingsOpen,
     onOpen: openFormSettings,
@@ -67,7 +62,22 @@ const Builder: React.FC = () => {
     setFormName,
     setFormDescription,
     updateSectionOrder,
+    hydrateForm,
   } = useForm();
+
+  const fetchFormData = async (id: string) => {
+    const formResponse = await axiosInstance.get(
+      FORM_ROUTES.GET_FORM_BY_ID(id)
+    );
+
+    return { ...formResponse.data, sections: JSON.parse(formResponse.data.sections ?? JSON.stringify([])) };
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchFormData(id as string).then(hydrateForm);
+    }
+  }, [id]);
 
   const addNewSection = () => {
     const newSection: Section = {
@@ -118,10 +128,10 @@ const Builder: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
-    if (!formName) openFormSettings()
-  }, [formName])
+    if (!formName) openFormSettings();
+  }, [formName]);
+
 
   return (
     <BuilderLayout
@@ -137,6 +147,7 @@ const Builder: React.FC = () => {
         setFormName={setFormName}
         formDescription={formDescription}
         setFormDescription={setFormDescription}
+        id={id as string}
       />
 
       <div className="relative flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
@@ -165,6 +176,7 @@ const Builder: React.FC = () => {
                     }
                     sectionValue={section.value}
                     options={section.options}
+                    section_type={section.type as unknown as TSectionType}
                   />
                 </SortableItem>
               ))}
@@ -192,6 +204,7 @@ function FormSettingsModal({
   setFormName,
   formDescription,
   setFormDescription,
+  id,
 }: {
   formSettingsOpen: boolean;
   closeFormSettings: () => void;
@@ -199,15 +212,14 @@ function FormSettingsModal({
   setFormName: (name: string) => void;
   formDescription: string;
   setFormDescription: (name: string) => void;
+  id: string;
 }) {
-  const { user } = useAuth();
   const [initialValues] = useState({
     formName,
     formDescription,
   });
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-
+  const onSaveFormDetails = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const title = e.currentTarget.formTitle.value;
@@ -215,12 +227,10 @@ function FormSettingsModal({
     // Use the title and description as needed
 
     if (!initialValues.formName) {
-      saveItem({
-        formName: title,
-        formDescription: description,
-        sections: [],
-        user: user?._id
-      })
+      await axiosInstance.put(FORM_ROUTES.UPDATE(id), {
+        name: title,
+        description: description,
+      } as FormInput);
     }
 
     setFormName(title);
@@ -240,7 +250,7 @@ function FormSettingsModal({
 
   return (
     <Modal title="Form settings" open={formSettingsOpen} onClose={onClose}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form onSubmit={onSaveFormDetails} className="flex flex-col gap-4 p-4">
         <div className="flex flex-col space-y-2">
           <label htmlFor="formTitle" className="text-start">
             Title
@@ -287,4 +297,3 @@ function FormSettingsModal({
     </Modal>
   );
 }
-

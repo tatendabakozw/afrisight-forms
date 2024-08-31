@@ -24,9 +24,9 @@ export const field_types = [
   },
   {
     name: "Rating",
-    _id: "multiple-choice",
+    _id: "rating",
     Icon: ListBulletIcon,
-    type: "select-item",
+    type: "rating",
   },
   {
     name: "File Upload",

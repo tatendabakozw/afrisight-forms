@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import GeneralLayout from "@/layouts/GeneralLayout";
@@ -8,32 +8,20 @@ import { SectionKey } from "@/context/FormContext";
 import ShortAnswer from "@/components/inputs/ShortAnswer";
 import Paragraph from "@/components/inputs/Paragraph";
 import TextArea from "@/components/inputs/TextArea";
-import MultipleChoice, { Option } from "@/components/inputs/MultipeChoice";
+import MultipleChoice from "@/components/inputs/MultipeChoice";
 import DatePicker from "@/components/inputs/DatePicker";
 import FileUpload from "@/components/inputs/FileUpload";
+import { Section } from "@/utils/types";
 
-interface SectionType {
-  name: string;
-  _id?: string;
-}
-
-interface Section {
-  id: number;
-  type: SectionType;
-  value: string;
-  options: Option[];
-}
 
 
 const SingleForm = () => {
   const router = useRouter();
   const { form_id } = router.query;
-  const [sectionValue, setSectionValue] = useState("");
 
   const { document, loading } = useSingleForm({
     collectionName: "forms",
     id: form_id as string,
-
   });
 
   return (
@@ -59,7 +47,7 @@ const SingleForm = () => {
         </div>
         {document && <div className="space-y-8">
           {document.sections.map((section, index) => (
-            <FieldSectionPresenter key={index} {...section} />
+            <FieldSectionPresenter key={index} section={section} />
           ))}
         </div>}
       </div>
@@ -68,17 +56,17 @@ const SingleForm = () => {
 };
 
 
-const FieldSectionPresenter = (props: Section) => {
-  const Component = getSectionComponent(props.type._id as SectionKey);
+const FieldSectionPresenter = (props: { section: Section }) => {
+  const Component = getSectionComponent(props.section.type.id as any);
 
   return (
     <div className="max-w-xl">
-      <p className="font-semibold mb-2">{props.value}</p>
+      <p className="font-semibold mb-2">{props.section.value}</p>
       <Component
-        options={props.options}
+        options={props.section.options}
         setOptions={() => null}
         setValue={() => null}
-        value={props.value}
+        value={props.section.value}
       />
     </div>
   );

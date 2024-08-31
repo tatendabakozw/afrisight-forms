@@ -1,29 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FormItem from "../form-item/FormItem";
 import useFetchFormByUserId from "@/hooks/useFetchFormById";
 import { useAuth } from "@/context/AuthContext";
 import FormLoading from "./FormLoading";
 import { FolderOpenIcon } from "@heroicons/react/24/outline";
+import { Form } from "@/utils/types";
+import { axiosInstance, FORM_ROUTES } from "@/utils/apiUrl";
 
-function GetUserForms() {
+function UserForms() {
   const { user } = useAuth(); // Assuming useAuth provides the user object
+  const [forms, setForms] = useState<Form[]>([]);
 
-  // Only call the hook if user is not null
-  const { forms, loading, error } = useFetchFormByUserId(user?._id || "");
-
-  if (!user) {
-    return <FormLoading />;
+  const getFormsForThisUser = async () => {
+    const response = await axiosInstance.get(FORM_ROUTES.GET_ALL_FORMS)
+    setForms(response.data)
   }
 
-  if (loading) {
-    return <FormLoading />;
-  }
+  const { loading, error } = useFetchFormByUserId(user?._id || "");
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  useEffect(() => {
+    getFormsForThisUser()
+  }, [])
 
   console.log({ forms })
+
   return (
     <div className="max-w-7xl w-full mx-auto">
       {loading && (
@@ -42,7 +42,7 @@ function GetUserForms() {
           <p>No forms added yet</p>
         </div>
       )}
-      <div className=" flex-row grid md:grid-cols-4 gap-8 grid-cols-1">
+      <div className=" flex-row grid grid-cols-3 gap-4">
         {forms.map((item) => (
           <FormItem
             key={item.id}
@@ -54,4 +54,4 @@ function GetUserForms() {
   );
 }
 
-export default GetUserForms;
+export default UserForms;

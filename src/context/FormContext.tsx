@@ -2,9 +2,10 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import crypto from "crypto";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { Form, Section } from "@/utils/types";
 
 
-export type SectionKey = "short-answer" | "date" | "multiple-choice" | "file-upload" | "text-area" | "paragraph";
+export type SectionKey = "short-answer" | "date" | "multiple-choice" | "file-upload" | "text-area" | "paragraph" | "rating";
 
 interface Option {
   name: string;
@@ -16,12 +17,7 @@ interface SectionType {
   type_id: string;
 }
 
-interface Section {
-  id: any;
-  type: SectionType;
-  value: string;
-  options: Option[]; // Added options property
-}
+
 
 interface FormContextProps {
   sections: Section[];
@@ -30,10 +26,11 @@ interface FormContextProps {
   addSection: (section: Section) => void;
   updateSection: (id: number, newValue: Partial<Section>) => void;
   deleteSection: (id: number) => void;
-  saveFormAsJSON: () => void;
+  stringifyForm: () => void;
   updateSectionOrder: (newSections: Section[]) => void;
   setFormName: (name: string) => void;
   setFormDescription: (name: string) => void;
+  hydrateForm: (form: Form) => void
 }
 
 const FormContext = createContext<FormContextProps | undefined>(undefined);
@@ -46,12 +43,17 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
   const [formDescription, setFormDescription] = useState<string>("");
 
 
+  const hydrateForm = (form: Form) => {
+    setFormName(form.name);
+    setFormDescription(form.description);
+    setSections(form.sections);
+  }
+
   const addSection = (section: Section) => {
     setSections((prevSections) => [...prevSections, section]);
   };
 
   const updateSection = (id: number, newValue: Partial<Section>) => {
-    console.log({ id, newValue })
     setSections((prevSections) =>
       prevSections.map((section) =>
         section.id === id ? { ...section, ...newValue } : section
@@ -74,7 +76,6 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     setSections(newSections);
   };
 
-  console.log({ sections })
 
   return (
     <FormContext.Provider
@@ -85,10 +86,11 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
         addSection,
         updateSection,
         deleteSection,
-        saveFormAsJSON,
+        stringifyForm: saveFormAsJSON,
         updateSectionOrder,
         setFormName,
         setFormDescription,
+        hydrateForm
       }}
     >
       {children}

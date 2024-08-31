@@ -1,11 +1,7 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { Input } from "../ui/Input";
-
-export type Option = {
-  name: string;
-  _id: string;
-};
+import { Option } from "@/utils/types";
 
 type Props = {
   value: string;
@@ -21,7 +17,7 @@ const MultipleChoice = ({ options, setOptions }: Props) => {
     if (newOptionName.trim()) {
       setOptions([
         ...options,
-        { name: newOptionName, _id: `op${options.length + 1}` },
+        { name: newOptionName, id: `op${options.length + 1}` },
       ]);
       setNewOptionName("");
     }
@@ -42,7 +38,7 @@ const MultipleChoice = ({ options, setOptions }: Props) => {
     <div className="flex flex-col">
 
       {options.map((option, index) => (
-        <div key={option._id} className="flex flex-row items-center gap-2 py-2">
+        <div key={option.id} className="flex flex-row items-center gap-2 py-2">
           <div className="h-4 w-4 border-2 border-zinc-400/50 rounded-full" />
           <Input
             type="text"

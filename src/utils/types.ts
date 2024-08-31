@@ -23,20 +23,24 @@ export interface DashboardItemProps {
   count: number;
 }
 
+export type TSectionType = {
+  name: string;
+  id: string;
+  _id?: string;
+  type?: string;
+};
+
 export interface SectionType {
   id: number;
-  options: Array<{ name: string; _id: string }>;
-  type: {
-    name: string;
-    _id: string;
-  };
+  options: Array<{ name: string; id: string }>;
   value: string;
+  type: TSectionType;
 }
 
 export interface DocumentType {
   description: string;
   name: string;
-  sections: Array<SectionType>;
+  sections: Array<Section>;
 }
 
 export interface FormType {
@@ -74,4 +78,51 @@ export interface GigType {
   createdAt: Date;
   updatedAt?: Date;
   userGigs: string; // Assuming userGigs references another model
+}
+
+export interface Option {
+  id: string;
+  name: string;
+}
+
+export interface Section {
+  id: number;
+  options: Option[];
+  type: SectionType;
+  value: string;
+}
+
+export interface Form {
+  _id: string;
+  id: string;
+  description: string;
+  name: string;
+  sections: Section[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FormInput {
+  description: string;
+  name: string;
+  sections: Omit<Section, "id">[];
+}
+
+export interface FormUpdateInput {
+  description?: string;
+  name?: string;
+  sections?: Omit<Section, "id">[];
+}
+
+export interface FormResponse {
+  form: Form;
+  message?: string;
+}
+
+export interface FormsListResponse {
+  forms: Form[];
+  total: number;
+  page: number;
+  limit: number;
 }

@@ -15,17 +15,16 @@ import Switch from "../ui/switch";
 import { useToggle } from "@/hooks/useToggle";
 import { Input } from "../ui/Input";
 import { DragIcon } from "../icons/drag";
+import RatingInput from "../inputs/RatingInput";
+import { Option, SectionType, TSectionType } from "@/utils/types";
 
-type Option = {
-  name: string;
-  _id: string;
-};
 
 interface Props {
   handleDeleteSection: () => void;
   handleSectionTypeChange: (newType: FieldType) => void;
   handleSectionValueChange: (newValue: string) => void;
   handleOptionsChange: (newOptions: Option[]) => void;
+  section_type: TSectionType
   sectionValue: string;
   options: Option[];
 }
@@ -38,10 +37,11 @@ function FieldSection({
   handleOptionsChange,
   sectionValue,
   options,
+  section_type
 }: Props) {
   const [question, setQuestion] = useState(sectionValue)
   const [editing, toggleEditing, setEditing] = useToggle(false);
-  const [type, setType] = useState<FieldType>(field_types[0]);
+  const [type, setType] = useState<FieldType>(section_type as any || field_types[0]);
 
   useEffect(() => {
     handleSectionTypeChange(type);
@@ -51,6 +51,7 @@ function FieldSection({
     setQuestion(sectionValue)
     if (!sectionValue) setEditing(true)
   }, [sectionValue]);
+
 
   const showInputArea = () => {
     switch (type._id) {
@@ -91,6 +92,10 @@ function FieldSection({
       case "paragraph":
         return (
           <Paragraph value={sectionValue} setValue={handleSectionValueChange} />
+        );
+      case "rating":
+        return (
+          <RatingInput maxValue={10} />
         );
       default:
         return (
