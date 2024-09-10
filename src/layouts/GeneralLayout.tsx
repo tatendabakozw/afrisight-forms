@@ -16,7 +16,7 @@ function GeneralLayout({ children }: Props) {
         <title>Build Your Form | Afrisight</title>
       </Head>
       <Navbar />
-      <div className="relative flex flex-col min-h-screen bg-zinc-100 pt-4">
+      <div className="relative flex flex-col min-h-screen pt-4">
         {children}
       </div>
     </div>

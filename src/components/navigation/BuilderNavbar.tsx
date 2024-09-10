@@ -11,6 +11,8 @@ import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { axiosInstance, FORM_ROUTES } from "@/utils/apiUrl";
+import { Square3Stack3DIcon } from "@heroicons/react/20/solid";
+import Spinner from "../ui/Spinner";
 
 
 export default function BuilderNavbar(props: {
@@ -28,7 +30,6 @@ export default function BuilderNavbar(props: {
 
     const { logout, user } = useAuth();
 
-    console.log({ sections })
 
     useEffect(() => {
         // if (success) router.push("/forms");
@@ -48,9 +49,14 @@ export default function BuilderNavbar(props: {
     }
     return (
         <nav className="sticky top-0 w-full z-20 bg-white border-b border-zinc-400/10">
-            <div className="container mx-auto p-4 flex justify-between items-center">
+            <div className="container mx-auto p-2 flex justify-between items-center">
                 <div className="flex flex-1 space-x-8">
-                    <Link href={"/forms"} className="w-[32px] h-[32px] rounded bg-zinc-200" />
+                    <Link href={"/forms"} className="font-semibold text-indigo-600 inline-flex items-center gap-2">
+                        <span className="w-[32px] h-[32px] rounded-md bg-indigo-100 flex items-center justify-center">
+                            <Square3Stack3DIcon className="size-5" />
+                        </span>
+                        Builder
+                    </Link>
                     <div className="flex gap-2 w-fit items-center">
                         <p className={cn(!props.title && "italic text-zinc-600", props.title && "font-bold")}>
                             {props.title || "Form title placeholder"}
@@ -63,33 +69,26 @@ export default function BuilderNavbar(props: {
                 </div>
                 <div className="flex justify-end gap-8">
                     <div className="flex gap-2 items-center">
-                        <button onClick={props.openSettingsModal} className="h-[36px] w-[36px] rounded-xl bg-zinc-100 transition-all hover:bg-zinc-200 flex items-center justify-center">
+                        <button onClick={props.openSettingsModal} className="h-[36px] w-[36px] button justify-center">
                             <GearIcon className="h-5 w-5" />
                         </button>
-                        <button onClick={props.openPreviewModal} className="h-[36px] w-[36px] rounded-xl bg-zinc-100 transition-all hover:bg-zinc-200 flex items-center justify-center">
-                            <PlayIcon className="h-5 w-5" />
+                        <button onClick={props.openPreviewModal} className="h-[36px] w-[36px] button p-0 justify-center">
+                            <PlayIcon className="h-6 w-6" />
                         </button>
-                        <button className="h-[36px] px-4 rounded-xl bg-zinc-100 transition-all hover:bg-zinc-200 flex items-center justify-center">
-                            Invite
-                        </button>
-                        <button onClick={onSaveToFirebase} className="h-[36px] px-4 font-semibold rounded-xl bg-blue-600 text-white flex items-center justify-center">
-                            {loading ? <Spinner /> : "Publish"}
+
+                        <button onClick={onSaveToFirebase} className="button w-20 justify-center">
+                            {loading ? <Spinner color={"text-zinc-600"} size={16} /> : "Publish"}
                         </button>
                     </div>
                     <button
-                        className="transition-all cursor-pointer duration-100 text-zinc-700 bg-zinc-100 p-2 rounded-full"
+                        className="bg-zinc-400/20 text-zinc-900 p-2 rounded-full flex gap-2 items-center pl-4 font-semibold"
                         onClick={logout}
                     >
+                        Sign out
                         <ArrowRightEndOnRectangleIcon height={24} width={24} />
                     </button>
                 </div>
             </div>
         </nav>
-    )
-}
-
-const Spinner = () => {
-    return (
-        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" />
     )
 }

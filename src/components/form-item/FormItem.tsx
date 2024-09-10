@@ -1,9 +1,6 @@
-import Image from "next/image";
 import { Form, SectionType } from "../../utils/types";
-import { PlayIcon } from "@heroicons/react/24/solid";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-
+import { formatDistanceToNow } from "date-fns"
 
 type Props = {
   item: Form;
@@ -25,7 +22,7 @@ const getRandomImage = () => {
 
 function FormItem({ item, list, selected, onClick }: Props) {
   const randomImage = getRandomImage();
-  console.log(item);
+  const sections = JSON.parse(item.sections as unknown as string) as SectionType[];
   return (
     <Link href={`/builder/${item._id}`} className="col-span-1 flex rounded-xl overflow-hidden bg-white pressable-shadow">
 
@@ -36,29 +33,22 @@ function FormItem({ item, list, selected, onClick }: Props) {
         <p className="text-zinc-500 dark:text-zinc-300 line-clamp-3 mb-2 max-w-md">
           {item.description}
         </p>
-        <div className='flex items-center gap-2 mb-4 font-medium text-zinc-500 dark:text-zinc-300 '>
+        <div className='flex items-center gap-2 font-medium text-zinc-500 dark:text-zinc-300 '>
           <p className="text-sm">
-            {5} min (est) to complete
+            {sections.length} questions
           </p>
           <p>
             &bull;
           </p>
           <p className="text-sm">
-            {item.sections.length} questions
+            {
+              formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
+            }
           </p>
+
         </div>
 
-        <div className="flex-1"></div>
-        <div className="flex flex-row flex-wrap">
-          {item.sections.map((item) => (
-            <span
-              className="bg-zinc-200 text-xs font-medium mb-2 mr-2 rounded px-2 py-1 dark:bg-zinc-800 dark:text-white text-zinc-950"
-              key={item.id}
-            >
-              {item.type.type.name}
-            </span>
-          ))}
-        </div>
+
       </div>
     </Link>
   );

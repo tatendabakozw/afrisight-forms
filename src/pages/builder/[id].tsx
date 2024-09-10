@@ -128,9 +128,7 @@ const Builder: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!formName) openFormSettings();
-  }, [formName]);
+
 
 
   return (
@@ -150,7 +148,7 @@ const Builder: React.FC = () => {
         id={id as string}
       />
 
-      <div className="relative flex flex-col w-full bg-zinc-100 h-full flex-1 px-4 p-8">
+      <div className="relative flex flex-col w-full  h-full flex-1 px-4 p-8">
         <div className="max-w-2xl mx-auto w-full space-y-6">
           <DndContext
             sensors={sensors}

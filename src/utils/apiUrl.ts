@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const apiUrl = "http://localhost:5500/v2"; //`https://afrisight-express.onrender.com`;
+export const apiUrl = process.env.NEXT_PUBLIC_API_URL; //`https://afrisight-express.onrender.com`;
 
 export const AUTH_ROUTES = {
   REFRESH_TOKEN: "/auth/token/refresh",

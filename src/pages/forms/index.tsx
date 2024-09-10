@@ -12,7 +12,7 @@ function Forms() {
     const response = await axiosInstance.post(FORM_ROUTES.CREATE, {
       name: "Untitled",
       description: "",
-      sections: []
+      sections: JSON.stringify([])
     })
 
     if (response.data._id) {

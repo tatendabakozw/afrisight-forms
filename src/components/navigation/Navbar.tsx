@@ -8,6 +8,7 @@ import { getMessage } from "@/helpers/getMessage";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { Square3Stack3DIcon } from "@heroicons/react/20/solid";
 
 type Props = {};
 
@@ -48,21 +49,16 @@ function Navbar({ }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center py-4 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
+    <div className="flex flex-col items-center py-2 border-b fixed z-50 top-0 w-full bg-white border-zinc-200/50">
       <div className="flex flex-row items-center max-w-7xl justify-between w-full mx-auto px-4 space-x-4">
         <div className="flex flex-row items-center">
-          <Link
-            href={"#"}
-            className="font-semibold text-zinc-950"
-          >
-            Form Builder
+          <Link href={"/forms"} className="font-semibold text-indigo-600 inline-flex items-center gap-2">
+            <span className="w-[32px] h-[32px] rounded-md bg-indigo-100 flex items-center justify-center">
+              <Square3Stack3DIcon className="size-5" />
+            </span>
+            Builder
           </Link>
-          <Link
-            href={"/forms"}
-            className="md:flex hidden ml-8 flex-row items-center"
-          >
-            Forms
-          </Link>
+
         </div>
 
         <div className="flex flex-row items-center space-x-4">
@@ -76,10 +72,11 @@ function Navbar({ }: Props) {
             />
           )}
           <button
-            className="transition-all cursor-pointer duration-100 text-zinc-700 bg-zinc-100 p-2 rounded-full"
+            className="bg-zinc-400/20 text-zinc-900 p-2 rounded-full flex gap-2 items-center pl-4 font-semibold"
             onClick={logout}
           >
-            <ArrowRightEndOnRectangleIcon height={24} width={24} />
+            Sign out
+            <ArrowRightEndOnRectangleIcon height={20} width={20} />
           </button>
         </div>
       </div>

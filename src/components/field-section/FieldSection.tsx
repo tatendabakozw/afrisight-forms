@@ -45,7 +45,7 @@ function FieldSection({
 
   useEffect(() => {
     handleSectionTypeChange(type);
-  }, [type]);
+  }, [type, handleSectionTypeChange]);
 
   useEffect(() => {
     setQuestion(sectionValue)

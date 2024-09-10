@@ -14,7 +14,6 @@ export const field_types = [
     Icon: Bars3BottomLeftIcon,
     type: "input",
   },
-  { name: "Test Area", _id: "text-area", Icon: H1Icon, type: "text-area" },
   { name: "Paragraph", _id: "paragraph", Icon: Bars4Icon, type: "input" },
   {
     name: "Mutiple choice",
