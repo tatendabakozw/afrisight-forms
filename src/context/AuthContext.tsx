@@ -11,8 +11,6 @@ import { useRouter } from "next/router";
 import { apiUrl, AUTH_ROUTES } from "../utils/apiUrl";
 import { User } from "@/utils/types";
 import crypto from "crypto";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 type Organization = {
   id: string;
@@ -30,7 +28,6 @@ interface AuthContextType {
   login: (props: { username: string; password: string }) => Promise<void>;
   logout: () => void;
   register: (props: {
-    username: string;
     password: string;
     confirm_password: string;
     email: string;
@@ -83,18 +80,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const register = async ({
-    username,
     password,
     confirm_password,
     email,
   }: {
-    username: string;
     password: string;
     confirm_password: string;
     email: string;
   }) => {
     const response = await axios.post(`${apiUrl}${AUTH_ROUTES.CREATE_USER}`, {
-      username,
       password,
       confirm_password, // Include confirm_password in the API request
       email,

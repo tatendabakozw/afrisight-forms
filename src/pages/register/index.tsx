@@ -20,7 +20,7 @@ function Register() {
   const registerUserToBuilder = async () => {
     setLoading(true);
     try {
-      await register({ username, email, password, confirm_password });
+      await register({ email, password, confirm_password });
       setSuccess(true);
       setErr("");
       setLoading(false);
@@ -48,12 +48,6 @@ function Register() {
             setValue={setEmail}
             placeholder="email"
             label={"Email"}
-          />
-          <PrimaryInput
-            value={username}
-            setValue={setUsername}
-            placeholder="username"
-            label={"Username"}
           />
           <PrimaryInput
             value={password}
@@ -84,7 +78,7 @@ function Register() {
               Agree to terms and conditions
             </label>
           </div>
-          {err && <AlertMessage type="error" text={err.toString()} />}
+          {err && <AlertMessage type="error" text={"An error occurred. Please try again"} />}
           <PrimaryButton
             loading={loading}
             success={success}

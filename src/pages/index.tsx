@@ -50,8 +50,8 @@ function Login() {
           <PrimaryInput
             value={username}
             setValue={setUsername}
-            placeholder="username"
-            label={"username"}
+            placeholder="Email address"
+            label={"Email"}
           />
           <PrimaryInput
             value={password}
@@ -64,7 +64,7 @@ function Login() {
           <p className="text-brand-original text-sm text-end">
             Forgot password
           </p>
-          {err && <AlertMessage type="error" text={err.toString()} />}
+          {err && <AlertMessage type="error" text={"An error occurred. Please try again"} />}
           <PrimaryButton
             loading={loading}
             success={success}
